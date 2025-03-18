@@ -1,0 +1,166 @@
+<html>
+    <head>
+        <title>Mugiwara-no Basket</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+            body {
+                background: oklch(0.141 0.005 285.823);
+                font-family: "Roboto";
+                color: white;
+            }
+
+            #main {
+                flex: 1;
+            }
+
+            header {
+                border-bottom: 1px solid oklch(0.371 0 0);
+                height: 80px;
+                width: 100%;
+                position: fixed;
+                top: 0;
+            }
+
+            header main h1 {
+                font-size: 35px;
+                display: flex;
+                gap: 12px;
+                align-items: center;
+            }
+
+            header main h1 img {
+                border-radius: 18px;
+                width: 50px;
+            }
+
+            header main {
+                padding: 8px;
+                display: flex;
+                height: 100%;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .container {
+                position: relative;
+                top: 100px;
+                margin-left: 8px;
+                margin-right: 8px;
+            }
+
+            nav {
+                display: flex;
+                gap: 24px;
+            }
+
+            nav a {
+                cursor: pointer;
+                font-size: 25px;
+                color: orange;
+                padding: 8px;
+                border-radius: 4px;
+            }
+
+            nav a:hover {
+                background: oklch(0.274 0.006 286.033);
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            footer {
+                width: 100%;
+                position: fixed;
+                bottom: 0;
+                background: oklch(0.21 0.006 285.885);
+                height: 50px;
+            }
+
+            footer div {
+                display: flex;
+                gap: 48px;
+                height: 100%;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .joueurs {
+                display: flex;
+                gap: 24px;
+            }
+
+            .joueur {
+                background: oklch(0.274 0.006 286.033);
+                padding: 8px;
+                border-radius: 8px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="main">
+            <header>
+                <main>
+                    <h1><img src="logo.jpg" /> Mugiwara-no Basket</h1>
+
+                    <nav>
+                        <a>Effectif</a>
+                        <a>Résultats</a>
+                        <a>Materiels</a>
+                        <a>Admin</a>
+                    </nav>
+                </main>
+            </header>
+
+            <main class="container">
+                <div class="joueurs">
+                   
+                </div>
+            </main>
+        </div>
+
+        <footer>
+            <div>
+                <p>A propos de nous</p>
+                <p>Whatsapp</p>
+                <p>Facebook</p>
+                <p>Instagram</p>
+            </div>
+        </footer>
+
+        <script>
+            const joueurs = [{
+                nom: "Solal",
+                age: "999",
+                poste: "5"
+            }, {
+                nom: "Remi",
+                age: "999",
+                poste: "24"
+            }, {
+                nom: "Titouan",
+                age: "999",
+                poste: "65"
+            }, {
+                nom: "Martin",
+                age: "999",
+                poste: "77"
+            }, {
+                nom: "Nouss",
+                age: "999",
+                poste: "1",
+            }]
+
+            const joueursDiv = document.querySelector(".joueurs");
+
+            joueurs.map(({nom, age, poste}) => {
+                const div = `<div class="joueur"><p>Nom: ${nom}</p><p>Poste: ${poste}</p>\n<p>Age: ${age}</p></div>`
+
+                joueursDiv.innerHTML += div;
+            })
+        </script>
+    </body>
+</html>
