@@ -116,15 +116,19 @@ nav a:hover {
     width: 100%;
     padding: 10px;
     border-radius: 5px;
-    border: 1px solid #ccc;
-    background-color: #fff;
+    border: 1px solid #f3eded;
+    background-color: #6d6363;
     color: #333;
     font-size: 16px;
 }
 
-.form-group input:focus {
+.form-group input{
     outline: none;
     border-color: #42aaff;
+}
+.form-group  input::placeholder{
+color: #42aaff;
+opacity: 50%;
 }
 
 /* Style du bouton de connexion */
