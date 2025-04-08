@@ -4,18 +4,32 @@ body {
     background: oklch(0.141 0.005 285.823);
     font-family: "Roboto";
     color: white;
+    overflow-x: hidden;  /* Empêche le défilement horizontal */
+    margin: 0;
+    display: flex;
+    justify-content: center;  /* Centre horizontalement */
+    align-items: flex-start;     /* Aligne les éléments au sommet */
+    flex-direction: column;  /* Empêche que tout soit sur la même ligne */
+    height: 100%;            /* Utilise 100% de la hauteur disponible */
 }
-
+#titre{
+    text-decoration: none;
+     color:#42aaff;
+     box-shadow: 110px;
+}
 #main {
     flex: 1;
 }
 
 header {
-    border-bottom: 1px solid oklch(0.371 0 0);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     height: 80px;
     width: 100%;
     position: fixed;
     top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);  /* Ajout d'un fond semi-transparent pour le header */
+    z-index: 10;
 }
 
 header main h1 {
@@ -39,8 +53,7 @@ header main {
 }
 
 .container {
-    position: relative;
-    top: 100px;
+    margin-top: 120px;  /* Décalage pour laisser de l'espace sous le header */
     margin-left: 8px;
     margin-right: 8px;
 }
@@ -51,15 +64,18 @@ nav {
 }
 
 nav a {
+    text-decoration: none;
     cursor: pointer;
     font-size: 25px;
-    color: orange;
+    color: #42aaff;  /* Nouveau bleu plus moderne */
     padding: 8px;
     border-radius: 4px;
+    transition: all 0.3s ease; /* Transition douce pour les effets au survol */
 }
 
 nav a:hover {
-    background: oklch(0.274 0.006 286.033);
+    background: rgba(66, 170, 255, 0.2); /* Effet de survol avec une légère ombre bleue */
+    transform: translateY(-3px); /* Léger effet de mouvement au survol */
 }
 
 * {
@@ -84,13 +100,60 @@ footer div {
     align-items: center;
 }
 
-.joueurs {
+/* Container pour l'image et la case avec les informations */
+.image-match-container {
     display: flex;
-    gap: 24px;
+    justify-content: center; /* Centre horizontalement */
+    align-items: flex-start; /* Aligne l'image et la case du match au top */
+    margin-top: 150px; /* Laisse de l'espace sous le header */
+    gap: 20px; /* Ajoute un espacement entre l'image et la case */
+    width: 100%; /* S'assure que le conteneur occupe toute la largeur de la fenêtre */
+    max-width: 1200px; /* Limite la largeur du conteneur pour une bonne présentation */
 }
 
-.joueur {
-    background: oklch(0.274 0.006 286.033);
-    padding: 8px;
-    border-radius: 8px;
+/* Style pour l'image du gymnase */
+#gymnase {
+    width: 100%;               /* Augmenter la largeur de l'image à 100% de la largeur de la fenêtre */
+    max-width: 700px;          /* Augmenter la taille maximale de l'image à 700px */
+    height: auto;               /* Conserver l'aspect ratio de l'image */
+    position: relative;         /* Positionnement naturel */
+    margin-top: 0;              /* Décalage vertical */
+    border-radius: 20px;
+}
+
+/* Box d'information du match */
+.match-info-box {
+    background-color: rgba(0, 0, 0, 0.7); /* Fond semi-transparent */
+    padding: 30px;
+    border-radius: 15px;
+    width: 100%;  /* Utilise toute la largeur disponible */
+    max-width: 700px; /* Assure que la box ne dépasse pas 700px */
+    color: white;
+    font-size: 18px;
+    box-shadow: 0 4px 10px rgba(66, 170, 255, 0.4); /* Ajout d'une ombre bleue subtile */
+    margin-left: 20px;  /* Ajoute un espacement entre l'image et la box */
+}
+
+/* Style pour les titres dans la box d'information du match */
+.match-info-box h2,
+.match-info-box p strong {
+    color: #42aaff; /* Nouveau bleu plus moderne */
+    font-weight: bold;
+    transition: all 0.3s ease; /* Effet de transition pour les titres */
+}
+
+.match-info-box h2:hover,
+.match-info-box p strong:hover {
+    color: #007acc; /* Change légèrement de teinte au survol */
+}
+
+/* Style pour les paragraphes dans la box */
+.match-info-box p {
+    margin-bottom: 10px;
+}
+
+/* Style pour les liens du footer */
+footer div p {
+    color: white;
+    cursor: pointer;
 }
