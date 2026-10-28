@@ -345,6 +345,10 @@ const vues = {
         : el("div", { class: "unie vide", style: "margin-top:18px" },
             el("p", {}, "Tu n'as pas encore de paquet."),
             el("p", {}, "Envoie un cours pour que Claude prépare tes fiches et un quiz, ou crée un paquet et écris tes fiches toi-même.")),
+      el("section", { style: "margin-top:40px" },
+        el("h2", { style: "margin:0 0 4px" }, "Paquets à ajouter"),
+        el("p", { class: "sous", style: "font-size:15px" }, "Des paquets prêts à réviser, partagés avec le site. Un clic et ils sont dans tes paquets."),
+        bibliotheque()),
       el("section", { class: "outils pile" },
         el("div", { class: "etiq" }, "Sauvegarde et partage"),
         el("p", { class: "sous", style: "font-size:15px" }, "Tes fiches restent dans ce navigateur, sur cet appareil. Pour les garder ailleurs ou recevoir le paquet d'un ami, utilise un fichier."),
@@ -916,8 +920,15 @@ async function importer(f) {
   if (!f) return;
   let recu;
   try { recu = JSON.parse(await f.text()); } catch (_) { return notif("Ce fichier n'est pas un fichier de fiches Bristol."); }
+  const n = ajouterPaquets(recu);
+  if (n === null) return notif("Ce fichier ne contient aucun paquet.");
+  notif(n ? `${pluriel(n, "paquet")} ajouté${n > 1 ? "s" : ""}` : "Aucun paquet lisible dans ce fichier.");
+  aller("accueil");
+}
+// Ajoute les paquets d'un fichier Bristol ; renvoie le nombre ajouté (null si le fichier n'en contient pas)
+function ajouterPaquets(recu, source) {
   const liste = recu && Array.isArray(recu.paquets) ? recu.paquets : null;
-  if (!liste || !liste.length) return notif("Ce fichier ne contient aucun paquet.");
+  if (!liste || !liste.length) return null;
   let n = 0;
   for (const p of liste) {
     if (!p || !String(p.nom || "").trim()) continue;
@@ -932,12 +943,40 @@ async function importer(f) {
       const propres = nettoyerResultat({ quiz: q && q.questions }).quiz;
       if (propres.length) quiz.push({ ...nouveauQuiz(String(q.titre || "Quiz").slice(0, 120), propres), scores: Array.isArray(q.scores) ? q.scores.slice(-50) : [] });
     }
-    donnees.paquets.unshift({ id: id(), nom: String(p.nom).trim().slice(0, 120), matiere: String(p.matiere || "").trim().slice(0, 80), cartes, quiz });
+    donnees.paquets.unshift({ id: id(), nom: String(p.nom).trim().slice(0, 120), matiere: String(p.matiere || "").trim().slice(0, 80), cartes, quiz, ...(source ? { source } : {}) });
     n++;
   }
   sauver();
-  notif(n ? `${pluriel(n, "paquet")} ajouté${n > 1 ? "s" : ""}` : "Aucun paquet lisible dans ce fichier.");
-  aller("accueil");
+  return n;
+}
+
+// ---------- Bibliothèque : paquets publiés avec le site (dossier paquets/) ----------
+function bibliotheque() {
+  const zone = el("div", { class: "grille" }, el("p", { class: "chiffres" }, "Chargement…"));
+  fetch("paquets/index.json", { cache: "no-cache" }).then(r => { if (!r.ok) throw 0; return r.json(); }).then(liste => {
+    liste = Array.isArray(liste) ? liste : [];
+    if (!liste.length) return zone.replaceChildren(el("p", { class: "chiffres" }, "Aucun paquet partagé pour l'instant."));
+    zone.replaceChildren(...liste.map(x => {
+      const deja = donnees.paquets.some(p => p.source === x.fichier);
+      return el("div", { class: "paquet fiche", style: "cursor:default" },
+        el("div", { class: "haut" }, x.matiere ? el("span", { class: "matiere" }, x.matiere) : null),
+        el("h3", {}, x.nom),
+        el("div", { class: "chiffres" }, `${pluriel(x.nb_cartes || 0, "fiche")} · ${pluriel(x.nb_quiz || 0, "quiz", "quiz")}`),
+        el("div", { class: "bas" }, deja
+          ? el("span", { class: "ajour" }, "✓ Déjà dans mes paquets")
+          : el("button", { class: "principal", onclick: async e => {
+              e.target.disabled = true;
+              try {
+                const r = await fetch("paquets/" + encodeURIComponent(x.fichier));
+                if (!r.ok) throw 0;
+                const n = ajouterPaquets(await r.json(), x.fichier);
+                if (!n) throw 0;
+                notif(`« ${x.nom} » ajouté à tes paquets`); aller("accueil");
+              } catch (_) { e.target.disabled = false; notif("Ce paquet n'a pas pu être ajouté : vérifie ta connexion."); }
+            } }, "＋ Ajouter à mes paquets")));
+    }));
+  }).catch(() => zone.replaceChildren(el("p", { class: "chiffres" }, "Les paquets partagés n'ont pas pu être chargés : vérifie ta connexion.")));
+  return zone;
 }
 
 // ---------- Actions ----------
