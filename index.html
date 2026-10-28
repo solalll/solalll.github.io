@@ -1,0 +1,1028 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bristol Révisions</title>
+<meta name="description" content="Fiches de révision façon bristol : révision espacée, quiz, et fiches préparées par Claude depuis ton cours.">
+<meta name="theme-color" content="#2340d0">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icone.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icone-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Bristol">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Caveat:wght@500;700&display=swap">
+<style>
+:root { color-scheme: light; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+[hidden] { display: none !important; }
+/* Mise en page : une table de travail, les paquets sont des fiches bristol posées dessus ; une colonne centrale de 880px. */
+:root {
+  --papier: #eef1f7; --fiche: #ffffff; --encre: #1b2140; --doux: #59617f; --trait: #d6dbe8;
+  --bleu: #2340d0; --bleu-texte: #ffffff; --bleu-doux: #e5e9ff; --marge: #df4a3f; --ligne: rgba(35,64,208,.11);
+  --surligneur: #ffe45a; --surligneur-texte: #2b2400;
+  --bon: #11804e; --bon-doux: #dff4ea; --mauvais: #c5342c; --mauvais-doux: #fbe4e2;
+  --ombre: 0 1px 0 rgba(27,33,64,.06), 0 8px 24px -12px rgba(27,33,64,.25);
+  --f-titre: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --f-texte: "Atkinson Hyperlegible", -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-main: "Caveat", "Bradley Hand", "Segoe Print", cursive;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --papier: #10131d; --fiche: #1a1f2f; --encre: #e7eaf5; --doux: #9ba3c2; --trait: #2c3349;
+    --bleu: #8ea0ff; --bleu-texte: #0e1230; --bleu-doux: #232a52; --marge: #ff6d63; --ligne: rgba(142,160,255,.09);
+    --surligneur: #e8cb3c; --surligneur-texte: #231d00;
+    --bon: #4bd39c; --bon-doux: #163828; --mauvais: #ff7a72; --mauvais-doux: #43201e;
+    --ombre: 0 1px 0 rgba(0,0,0,.3), 0 10px 26px -14px rgba(0,0,0,.8); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --papier: #10131d; --fiche: #1a1f2f; --encre: #e7eaf5; --doux: #9ba3c2; --trait: #2c3349;
+  --bleu: #8ea0ff; --bleu-texte: #0e1230; --bleu-doux: #232a52; --marge: #ff6d63; --ligne: rgba(142,160,255,.09);
+  --surligneur: #e8cb3c; --surligneur-texte: #231d00;
+  --bon: #4bd39c; --bon-doux: #163828; --mauvais: #ff7a72; --mauvais-doux: #43201e;
+  --ombre: 0 1px 0 rgba(0,0,0,.3), 0 10px 26px -14px rgba(0,0,0,.8); color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--papier); color: var(--encre); font: 16px/1.55 var(--f-texte); margin: 0; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--papier); }
+.page { max-width: 880px; margin: 0 auto; padding-block: 18px 72px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header.barre { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 22px; flex-wrap: wrap; }
+.marque { display: flex; align-items: center; gap: 10px; font: 800 21px/1 var(--f-titre); letter-spacing: -.02em; color: var(--encre); background: none; border: 0; padding: 4px 0; cursor: pointer; }
+.marque svg { width: 30px; height: 30px; flex-shrink: 0; }
+h1 { font: 800 clamp(28px, 6vw, 40px)/1.08 var(--f-titre); letter-spacing: -.025em; margin: 0 0 6px; text-wrap: balance; overflow-wrap: anywhere; }
+h2 { font: 700 21px/1.2 var(--f-titre); letter-spacing: -.01em; margin: 32px 0 12px; text-wrap: balance; }
+h3 { font: 700 19px/1.2 var(--f-titre); margin: 0; overflow-wrap: anywhere; text-wrap: balance; }
+p { margin: 0; }
+.sous { color: var(--doux); max-width: 62ch; }
+.pile { display: flex; flex-direction: column; gap: 12px; }
+.rangee { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.rangee.centre { justify-content: center; }
+.rangee.ecarte { justify-content: space-between; }
+button, .bouton { font: 600 15px/1.2 var(--f-texte); border: 1.5px solid var(--trait); background: var(--fiche); color: var(--encre); border-radius: 10px; padding: 10px 15px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px; transition: border-color .15s, transform .1s, background .15s; }
+button:hover:not(:disabled) { border-color: var(--bleu); }
+button:active:not(:disabled) { transform: translateY(1px); }
+button:disabled { opacity: .45; cursor: default; }
+button:focus-visible, [tabindex]:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid var(--bleu); outline-offset: 2px; }
+.principal { background: var(--bleu); border-color: var(--bleu); color: var(--bleu-texte); }
+.principal:hover:not(:disabled) { filter: brightness(1.08); }
+.danger { color: var(--mauvais); }
+.danger:hover:not(:disabled) { border-color: var(--mauvais); }
+.petit { padding: 6px 10px; min-height: 36px; font-size: 14px; }
+.lien { border: 0; background: none; color: var(--bleu); padding: 6px 0; min-height: 0; }
+.retour { margin-bottom: 8px; }
+.etiq { font: 700 12px/1 var(--f-texte); text-transform: uppercase; letter-spacing: .08em; color: var(--doux); }
+.matiere { display: inline-block; font: 700 12px/1 var(--f-texte); text-transform: uppercase; letter-spacing: .07em; color: var(--bleu); background: var(--bleu-doux); border-radius: 6px; padding: 5px 8px; }
+.exemple { display: inline-block; font: 700 12px/1 var(--f-texte); text-transform: uppercase; letter-spacing: .07em; color: var(--surligneur-texte); background: var(--surligneur); border-radius: 6px; padding: 5px 8px; }
+.surligne { background: linear-gradient(transparent 52%, var(--surligneur) 52%, var(--surligneur) 90%, transparent 90%); color: inherit; padding: 0 2px; }
+.chiffres { color: var(--doux); font-size: 14px; font-variant-numeric: tabular-nums; }
+
+/* Fiche bristol : bandeau, filet rouge, lignes bleues */
+.fiche { background-color: var(--fiche); background-image: linear-gradient(var(--fiche), var(--fiche)), linear-gradient(var(--marge), var(--marge)), repeating-linear-gradient(to bottom, transparent 0 27px, var(--ligne) 27px 28px); background-size: 100% 46px, 100% 2px, 100% 100%; background-position: 0 0, 0 46px, 0 20px; background-repeat: no-repeat, no-repeat, repeat; border-radius: 6px; box-shadow: var(--ombre); border: 1px solid var(--trait); }
+.unie { background: var(--fiche); border: 1px solid var(--trait); border-radius: 12px; padding: 18px; }
+
+/* Accueil */
+.bilan { display: grid; grid-template-columns: auto 1fr; gap: 6px 20px; align-items: center; margin-bottom: 18px; }
+.bilan .nombre { font: 800 clamp(56px, 14vw, 88px)/.9 var(--f-titre); letter-spacing: -.04em; color: var(--bleu); font-variant-numeric: tabular-nums; grid-row: span 2; }
+.bilan h1 { margin: 0; align-self: end; }
+.bilan .sous { align-self: start; }
+.grille { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 18px; margin-top: 18px; }
+.paquet { text-align: left; display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 10px; padding: 12px 16px 16px; min-height: 196px; cursor: pointer; width: 100%; font: inherit; color: inherit; transition: transform .18s, box-shadow .18s; }
+.paquet:hover { transform: translateY(-3px) rotate(-.4deg); }
+.paquet .haut { display: flex; gap: 6px; flex-wrap: wrap; min-height: 26px; align-items: center; }
+.paquet h3 { margin-top: 14px; }
+.paquet .bas { margin-top: auto; display: flex; flex-direction: column; gap: 8px; }
+.du { display: inline-block; font-weight: 700; font-size: 14px; background: var(--surligneur); color: var(--surligneur-texte); border-radius: 4px; padding: 2px 8px; align-self: flex-start; }
+.ajour { font-size: 14px; color: var(--bon); font-weight: 700; }
+.boites { display: grid; grid-template-columns: repeat(6, 1fr); gap: 3px; }
+.boites span { height: 22px; border-radius: 3px; background: var(--trait); position: relative; overflow: hidden; }
+.boites span i { position: absolute; inset: auto 0 0; background: var(--bleu); opacity: .85; }
+.boites span:first-child i { background: var(--doux); }
+.boites-legende { display: grid; grid-template-columns: repeat(6, 1fr); gap: 3px; font-size: 11px; color: var(--doux); text-align: center; font-variant-numeric: tabular-nums; }
+.vide { text-align: center; padding: 36px 18px; color: var(--doux); }
+.outils { margin-top: 40px; padding-top: 18px; border-top: 1px dashed var(--trait); }
+
+/* Liste des cartes */
+.onglets { display: flex; gap: 2px; border-bottom: 1.5px solid var(--trait); margin: 24px 0 16px; }
+.onglets button { border: 0; border-bottom: 3px solid transparent; border-radius: 0; background: none; color: var(--doux); margin-bottom: -1.5px; }
+.onglets button[aria-selected="true"] { color: var(--encre); border-bottom-color: var(--marge); }
+.ligne { background: var(--fiche); border: 1px solid var(--trait); border-radius: 10px; padding: 12px 14px; display: flex; gap: 12px; align-items: flex-start; }
+.ligne .contenu { flex: 1; min-width: 0; overflow-wrap: anywhere; white-space: pre-wrap; }
+.ligne .verso { color: var(--doux); margin-top: 3px; }
+.ligne .boutons { display: flex; gap: 6px; flex-shrink: 0; }
+.niveau { display: inline-flex; gap: 6px; align-items: center; margin-top: 6px; font-size: 13px; color: var(--doux); white-space: normal; }
+.niveau b { display: inline-flex; gap: 2px; }
+.niveau b i { width: 7px; height: 7px; border-radius: 2px; background: var(--trait); }
+.niveau b i.on { background: var(--bleu); }
+
+/* Révision */
+.progression { height: 6px; background: var(--trait); border-radius: 3px; overflow: hidden; margin: 8px 0 22px; }
+.progression div { height: 100%; background: var(--marge); transition: width .35s; }
+.scene { perspective: 1400px; margin: 0 auto; max-width: 640px; }
+.carte { position: relative; min-height: 300px; transition: transform .5s cubic-bezier(.3,.7,.3,1); transform-style: preserve-3d; cursor: pointer; }
+.carte.retournee { transform: rotateY(180deg); }
+.face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; padding: 64px 26px 30px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; overflow: auto; }
+.face .main { position: absolute; top: 9px; left: 18px; font: 700 26px/1 var(--f-main); color: var(--marge); }
+.face.dos .main { color: var(--bleu); }
+.face .texte { font-size: clamp(19px, 3.6vw, 23px); line-height: 1.45; white-space: pre-wrap; overflow-wrap: anywhere; }
+.face.dos { transform: rotateY(180deg); }
+.aide { text-align: center; color: var(--doux); font-size: 14px; margin: 14px 0 0; }
+.touche { display: inline-block; border: 1px solid var(--trait); border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; font-size: 12px; }
+.reponses { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 640px; margin: 18px auto 0; }
+.reponses button { min-height: 58px; font-size: 17px; }
+.non { background: var(--mauvais-doux); border-color: var(--mauvais); color: var(--mauvais); }
+.oui { background: var(--bon-doux); border-color: var(--bon); color: var(--bon); }
+.fin { text-align: center; padding: 64px 22px 26px; }
+.fin h1 { font-size: clamp(30px, 6vw, 42px); }
+.fin .main { font: 700 30px/1 var(--f-main); color: var(--marge); }
+
+/* Quiz */
+.question { font: 700 21px/1.35 var(--f-titre); white-space: pre-wrap; overflow-wrap: anywhere; }
+.choix { display: flex; flex-direction: column; gap: 8px; margin: 16px 0; }
+.choix button { justify-content: flex-start; text-align: left; min-height: 54px; padding: 12px 14px; white-space: pre-wrap; overflow-wrap: anywhere; font-weight: 400; }
+.choix button[aria-pressed="true"] { border: 2px solid var(--bleu); background: var(--bleu-doux); }
+.lettre { display: inline-flex; width: 28px; height: 28px; border-radius: 50%; background: var(--papier); border: 1px solid var(--trait); align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; font-size: 14px; }
+.score { font: 800 68px/1 var(--f-titre); letter-spacing: -.03em; text-align: center; font-variant-numeric: tabular-nums; }
+.correction { border-left: 4px solid var(--trait); }
+.correction.juste { border-left-color: var(--bon); }
+.correction.faux { border-left-color: var(--mauvais); }
+.r { margin-top: 4px; font-size: 15px; }
+.r.bonne { color: var(--bon); font-weight: 700; }
+.r.mauvaise { color: var(--mauvais); text-decoration: line-through; }
+.explication { color: var(--doux); font-size: 14px; margin-top: 6px; }
+
+/* Formulaires */
+label { display: block; font-weight: 700; margin: 14px 0 5px; font-size: 15px; }
+input[type=text], textarea, select { font: inherit; width: 100%; padding: 10px 12px; border: 1.5px solid var(--trait); border-radius: 10px; background: var(--fiche); color: var(--encre); }
+textarea { resize: vertical; min-height: 80px; }
+.deux { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+.edition { background: var(--fiche); border: 1px solid var(--trait); border-radius: 12px; padding: 12px 14px 14px; }
+.edition .entete { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.edition label { margin-top: 10px; font-size: 14px; }
+.edition textarea { min-height: 54px; }
+.ligne-choix { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.ligne-choix input[type=radio] { width: 22px; height: 22px; accent-color: var(--bon); flex-shrink: 0; margin: 0; }
+.ligne-choix input[type=text] { padding: 8px 10px; min-width: 0; }
+.depot { border: 2px dashed var(--trait); border-radius: 12px; padding: 18px; text-align: center; color: var(--doux); cursor: pointer; overflow-wrap: anywhere; }
+.depot.survol { border-color: var(--bleu); background: var(--bleu-doux); }
+.depot strong { color: var(--encre); }
+.chargement { text-align: center; padding: 48px 16px; }
+.crayon { width: 64px; height: 64px; margin: 0 auto 18px; animation: ecrit 1.1s ease-in-out infinite alternate; }
+@keyframes ecrit { from { transform: translateX(-10px) rotate(-6deg); } to { transform: translateX(10px) rotate(6deg); } }
+.alerte { background: var(--mauvais-doux); color: var(--mauvais); border-radius: 10px; padding: 11px 14px; margin-top: 12px; }
+.info { background: var(--bleu-doux); border-radius: 10px; padding: 11px 14px; margin-top: 12px; }
+
+/* Fenêtre et notification */
+.voile { position: fixed; inset: 0; background: rgba(8,10,24,.5); display: flex; align-items: center; justify-content: center; padding: 16px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); z-index: 20; }
+.fenetre { background: var(--fiche); border-radius: 14px; padding: 20px; width: 100%; max-width: 520px; max-height: 90vh; overflow: auto; box-shadow: var(--ombre); }
+.fenetre h2 { margin-top: 0; }
+#notif { position: fixed; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%); background: var(--encre); color: var(--papier); padding: 11px 18px; border-radius: 10px; z-index: 30; opacity: 0; transition: opacity .25s; pointer-events: none; max-width: calc(100% - 32px); text-align: center; }
+#notif.visible { opacity: 1; }
+@media (max-width: 560px) {
+  .deux { grid-template-columns: 1fr; }
+  .bilan { grid-template-columns: 1fr; }
+  .bilan .nombre { grid-row: auto; }
+  .reponses button { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="barre">
+    <button class="marque" id="marque" type="button" aria-label="Accueil : mes paquets">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="9" width="24" height="17" rx="2" fill="var(--fiche)" stroke="var(--doux)" stroke-width="1.4" transform="rotate(-6 14 17)"/><rect x="6" y="7" width="24" height="17" rx="2" fill="var(--fiche)" stroke="var(--encre)" stroke-width="1.5"/><path d="M6 12.5h24" stroke="var(--marge)" stroke-width="1.6"/><path d="M9 16.5h16M9 20h11" stroke="var(--bleu)" stroke-width="1.2" opacity=".6"/></svg>
+      Bristol
+    </button>
+  </header>
+  <main id="app"></main>
+</div>
+<div id="notif" role="status"></div>
+
+<script>
+"use strict";
+const app = document.getElementById("app");
+const CLE_STOCKAGE = "bristol.donnees.v1";
+const ATTENTE_JOURS = [1, 2, 4, 8, 16];   // boîtes de Leitner 1 à 5
+const JOUR = 86400;
+const LETTRES = "ABCDEF";
+let nettoyage = null;   // à appeler en quittant une vue (raccourcis clavier, appel à Claude)
+let brouillon = null;   // résultat de génération en cours de relecture
+let vue = ["accueil"];
+
+// ---------- Données (dans le navigateur de chacun) ----------
+let stockageOk = true;
+let donnees = charger();
+function charger() {
+  try {
+    const brut = localStorage.getItem(CLE_STOCKAGE);
+    if (brut) { const d = JSON.parse(brut); if (d && Array.isArray(d.paquets)) return d; }
+  } catch (_) { stockageOk = false; }
+  return { paquets: [paquetExemple()] };
+}
+function sauver() {
+  try { localStorage.setItem(CLE_STOCKAGE, JSON.stringify(donnees)); stockageOk = true; }
+  catch (_) { if (stockageOk) notif("Ce navigateur n'enregistre pas : tes fiches seront perdues en fermant la page."); stockageOk = false; }
+}
+function id() { return Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4); }
+function maintenant() { return Date.now() / 1000; }
+function nouvelleCarte(recto, verso) { return { id: id(), recto, verso, boite: 0, vues: 0, prochaine: 0 }; }
+function nouveauQuiz(titre, questions) { return { id: id(), titre, questions, scores: [] }; }
+function paquet(pid) { return donnees.paquets.find(p => p.id === pid); }
+function aRevoir(p) { const t = maintenant(); return p.cartes.filter(c => c.prochaine <= t); }
+function maitrisees(p) { return p.cartes.filter(c => c.boite === 5).length; }
+
+function paquetExemple() {
+  const cartes = [
+    ["Quel organite produit l'essentiel de l'ATP de la cellule ?", "La mitochondrie, par la respiration cellulaire."],
+    ["Où se trouve l'ADN dans une cellule eucaryote ?", "Surtout dans le noyau (un peu aussi dans les mitochondries)."],
+    ["Rôle des ribosomes ?", "Fabriquer les protéines en lisant l'ARN messager (traduction)."],
+    ["Différence entre cellule procaryote et eucaryote ?", "La cellule eucaryote a un vrai noyau entouré d'une membrane ; la procaryote (bactérie) n'en a pas."],
+    ["Que fait la membrane plasmique ?", "Elle délimite la cellule et contrôle ce qui entre et sort."],
+    ["Où a lieu la photosynthèse ?", "Dans les chloroplastes des cellules végétales."],
+    ["Qu'est-ce que la mitose ?", "La division d'une cellule en deux cellules filles identiques."],
+    ["Rôle de l'appareil de Golgi ?", "Modifier, trier et expédier les protéines vers leur destination."],
+  ].map(([r, v]) => nouvelleCarte(r, v));
+  return {
+    id: id(), nom: "Biologie cellulaire", matiere: "SVT", exemple: true, cartes,
+    quiz: [nouveauQuiz("Quiz – La cellule", [
+      { question: "Quel organite contient la majorité de l'ADN d'une cellule eucaryote ?", choix: ["Le ribosome", "Le noyau", "L'appareil de Golgi", "La membrane plasmique"], bonne: 1, explication: "L'ADN est rangé dans le noyau ; les mitochondries en ont un peu." },
+      { question: "Que produit principalement la mitochondrie ?", choix: ["Des protéines", "Du glucose", "De l'ATP", "De l'ADN"], bonne: 2, explication: "La respiration cellulaire dans la mitochondrie produit l'ATP, la « monnaie énergétique »." },
+      { question: "Une bactérie est une cellule…", choix: ["procaryote", "eucaryote", "végétale", "sans membrane"], bonne: 0, explication: "Les bactéries n'ont pas de noyau : ce sont des procaryotes." },
+      { question: "Où se fait la photosynthèse ?", choix: ["Dans le noyau", "Dans les ribosomes", "Dans les mitochondries", "Dans les chloroplastes"], bonne: 3, explication: "Les chloroplastes captent la lumière pour fabriquer des sucres." },
+    ])],
+  };
+}
+
+// ---------- Outils ----------
+function el(tag, attrs, ...enfants) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (v === null || v === undefined || v === false) continue;
+    if (k.startsWith("on")) e.addEventListener(k.slice(2), v);
+    else if (k === "class") e.className = v;
+    else if (k === "value") e.value = v;
+    else e.setAttribute(k, v === true ? "" : v);
+  }
+  for (const c of enfants.flat()) if (c !== null && c !== undefined && c !== false) e.append(c instanceof Node ? c : String(c));
+  return e;
+}
+function notif(texte) {
+  const n = document.getElementById("notif");
+  n.textContent = texte; n.classList.add("visible");
+  clearTimeout(notif.t); notif.t = setTimeout(() => n.classList.remove("visible"), 2800);
+}
+function ajouter(parent, ...enfants) { parent.append(...enfants.flat().filter(x => x !== null && x !== undefined && x !== false)); }
+function montrer(...enfants) { app.replaceChildren(...enfants.flat().filter(x => x !== null && x !== undefined && x !== false)); }
+function melanger(t) { t = t.slice(); for (let i = t.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [t[i], t[j]] = [t[j], t[i]]; } return t; }
+function pluriel(n, mot, motPluriel) { return n + " " + (n > 1 ? (motPluriel || mot + "s") : mot); }
+function retour(texte, ...cible) { return el("button", { class: "lien retour", onclick: () => aller(...cible) }, "← " + texte); }
+function alerte(texte) { return el("div", { class: "alerte", role: "alert" }, texte); }
+
+function fenetre(titre, contenu, boutons) {
+  return new Promise(resolve => {
+    const fermer = v => { voile.remove(); document.removeEventListener("keydown", touche); resolve(v); };
+    const touche = e => { if (e.key === "Escape") fermer(null); };
+    const voile = el("div", { class: "voile", onclick: e => { if (e.target === voile) fermer(null); } },
+      el("div", { class: "fenetre", role: "dialog", "aria-modal": "true" },
+        el("h2", {}, titre), contenu,
+        el("div", { class: "rangee", style: "justify-content:flex-end;margin-top:18px" },
+          el("button", { onclick: () => fermer(null) }, "Annuler"),
+          boutons.map(b => el("button", { class: b.classe || "principal", onclick: () => { const v = b.action(); if (v !== false) fermer(v === undefined ? true : v); } }, b.texte)))));
+    document.body.append(voile);
+    document.addEventListener("keydown", touche);
+    const premier = voile.querySelector("input, textarea, .fenetre button.principal"); if (premier) premier.focus();
+  });
+}
+function confirmer(titre, texte, bouton) {
+  return fenetre(titre, el("p", {}, texte), [{ texte: bouton, classe: "principal", action: () => true }]);
+}
+
+function boites(p) {
+  const n = [0, 0, 0, 0, 0, 0];
+  for (const c of p.cartes) n[c.boite]++;
+  const max = Math.max(1, ...n);
+  return el("div", { class: "pile", style: "gap:3px", title: "Répartition des cartes : nouvelles, puis boîtes 1 à 5" },
+    el("div", { class: "boites", "aria-hidden": "true" }, n.map(x => el("span", {}, el("i", { style: `height:${x / max * 100}%` })))),
+    el("div", { class: "boites-legende", "aria-label": `Nouvelles : ${n[0]}, boîtes 1 à 5 : ${n.slice(1).join(", ")}` },
+      el("span", {}, "neuves"),[1, 2, 3, 4, 5].map(b => el("span", {}, "B" + b))));
+}
+function niveau(c) {
+  const noms = ["Nouvelle", "À apprendre", "En cours", "En cours", "Bien sue", "Maîtrisée"];
+  const jours = Math.ceil((c.prochaine - maintenant()) / JOUR);
+  const quand = !c.vues ? "jamais révisée" : jours <= 0 ? "à revoir maintenant" : jours === 1 ? "à revoir demain" : `à revoir dans ${jours} jours`;
+  return el("span", { class: "niveau" },
+    el("b", { "aria-hidden": "true" }, [1, 2, 3, 4, 5].map(b => el("i", { class: c.boite >= b ? "on" : "" }))),
+    `${noms[c.boite]} · ${quand}`);
+}
+
+// ---------- Vues ----------
+const vues = {
+  accueil() {
+    const total = donnees.paquets.reduce((s, p) => s + aRevoir(p).length, 0);
+    const fichierImport = el("input", { type: "file", accept: ".json,application/json", hidden: true, onchange: () => importer(fichierImport.files[0]) });
+    montrer(
+      el("section", { class: "bilan" },
+        el("div", { class: "nombre" }, total),
+        el("h1", {}, total ? `${total > 1 ? "fiches" : "fiche"} à revoir aujourd'hui` : "Rien à revoir aujourd'hui"),
+        el("p", { class: "sous" }, total ? "Commence par le paquet surligné. Les fiches ratées reviennent plus souvent." : "Ajoute des fiches, ou reviens demain : les fiches sues reviennent de moins en moins souvent.")),
+      el("div", { class: "rangee" },
+        el("button", { class: "principal", onclick: () => aller("generer") }, "✨ Créer depuis un cours"),
+        el("button", { onclick: nouveauPaquet }, "＋ Nouveau paquet")),
+      !stockageOk ? alerte("Ce navigateur bloque l'enregistrement (fenêtre privée ?) : tes fiches seront perdues en fermant la page.") : null,
+      donnees.paquets.length
+        ? el("div", { class: "grille" }, donnees.paquets.map(p => {
+            const du = aRevoir(p).length;
+            return el("button", { class: "paquet fiche", onclick: () => aller("paquet", p.id) },
+              el("div", { class: "haut" }, p.matiere ? el("span", { class: "matiere" }, p.matiere) : null, p.exemple ? el("span", { class: "exemple" }, "Exemple") : null),
+              el("h3", {}, p.nom),
+              el("div", { class: "chiffres" }, `${pluriel(p.cartes.length, "fiche")} · ${pluriel(p.quiz.length, "quiz", "quiz")} · ${maitrisees(p)} maîtrisée${maitrisees(p) > 1 ? "s" : ""}`),
+              el("div", { class: "bas" },
+                du ? el("span", { class: "du" }, `${du} à revoir`) : el("span", { class: "ajour" }, p.cartes.length ? "✓ À jour" : "Vide pour l'instant"),
+                p.cartes.length ? boites(p) : null));
+          }))
+        : el("div", { class: "unie vide", style: "margin-top:18px" },
+            el("p", {}, "Tu n'as pas encore de paquet."),
+            el("p", {}, "Envoie un cours pour que Claude prépare tes fiches et un quiz, ou crée un paquet et écris tes fiches toi-même.")),
+      el("section", { class: "outils pile" },
+        el("div", { class: "etiq" }, "Sauvegarde et partage"),
+        el("p", { class: "sous", style: "font-size:15px" }, "Tes fiches restent dans ce navigateur, sur cet appareil. Pour les garder ailleurs ou recevoir le paquet d'un ami, utilise un fichier."),
+        el("div", { class: "rangee" },
+          el("button", { onclick: () => telecharger(`bristol-sauvegarde-${new Date().toISOString().slice(0, 10)}.json`, { bristol: 1, paquets: donnees.paquets }) }, "Sauvegarder tout dans un fichier"),
+          el("button", { onclick: () => fichierImport.click() }, "Ouvrir un fichier de fiches"), fichierImport)));
+  },
+
+  paquet(pid, onglet) {
+    const p = paquet(pid);
+    if (!p) return aller("accueil");
+    onglet = onglet || "cartes";
+    const du = aRevoir(p).length;
+    const contenu = el("div", { class: "pile", style: "gap:8px" });
+    montrer(
+      retour("Mes paquets", "accueil"),
+      el("div", { class: "rangee", style: "margin-bottom:8px" }, p.matiere ? el("span", { class: "matiere" }, p.matiere) : null, p.exemple ? el("span", { class: "exemple" }, "Exemple") : null),
+      el("h1", {}, p.nom),
+      el("p", { class: "chiffres", style: "font-size:15px;margin-bottom:14px" }, `${pluriel(p.cartes.length, "fiche")} · ${du} à revoir · ${maitrisees(p)} maîtrisée${maitrisees(p) > 1 ? "s" : ""}`),
+      el("div", { class: "rangee" },
+        el("button", { class: "principal", disabled: !du, onclick: () => aller("reviser", p.id) }, du ? `▶ Réviser (${du})` : "✓ Rien à revoir"),
+        el("button", { disabled: !p.cartes.length, onclick: () => aller("reviser", p.id, "tout") }, "Tout réviser"),
+        el("button", { onclick: () => aller("generer", p.id) }, "✨ Ajouter depuis un cours")),
+      el("div", { class: "rangee", style: "margin-top:8px" },
+        el("button", { class: "petit", onclick: () => modifierPaquet(p) }, "✎ Renommer"),
+        el("button", { class: "petit", onclick: () => telecharger(`bristol-${nomFichier(p.nom)}.json`, { bristol: 1, paquets: [partageable(p)] }) }, "Envoyer à un ami"),
+        el("button", { class: "petit danger", onclick: () => supprimerPaquet(p) }, "Supprimer le paquet")),
+      el("div", { class: "onglets", role: "tablist" },
+        el("button", { role: "tab", "aria-selected": String(onglet === "cartes"), onclick: () => aller("paquet", p.id, "cartes") }, `Fiches (${p.cartes.length})`),
+        el("button", { role: "tab", "aria-selected": String(onglet === "quiz"), onclick: () => aller("paquet", p.id, "quiz") }, `Quiz (${p.quiz.length})`)),
+      contenu);
+
+    if (onglet === "cartes") {
+      ajouter(contenu,
+        el("div", { class: "rangee", style: "margin-bottom:6px" },
+          el("button", { class: "principal", onclick: () => editerCarte(p) }, "＋ Ajouter une fiche"),
+          p.cartes.length ? el("button", { onclick: () => reinitialiser(p) }, "Tout remettre à revoir") : null),
+        p.cartes.length ? p.cartes.map(c => el("div", { class: "ligne" },
+          el("div", { class: "contenu" }, el("strong", {}, c.recto), el("div", { class: "verso" }, c.verso), niveau(c)),
+          el("div", { class: "boutons" },
+            el("button", { class: "petit", "aria-label": "Modifier la fiche", title: "Modifier", onclick: () => editerCarte(p, c) }, "✎"),
+            el("button", { class: "petit danger", "aria-label": "Supprimer la fiche", title: "Supprimer", onclick: () => supprimerCarte(p, c) }, "✕"))))
+          : el("div", { class: "unie vide" }, "Aucune fiche. Ajoute-en une, ou crée-les depuis un cours."));
+    } else {
+      ajouter(contenu,
+        el("div", { class: "rangee", style: "margin-bottom:6px" },
+          el("button", { class: "principal", onclick: () => aller("editerQuiz", p.id) }, "＋ Créer un quiz"),
+          el("button", { disabled: p.cartes.length < 4, title: p.cartes.length < 4 ? "Il faut au moins 4 fiches" : null, onclick: () => quizDepuisCartes(p) }, "Quiz avec mes fiches")),
+        p.quiz.length ? p.quiz.map(q => {
+          const meilleur = q.scores.length ? Math.max(...q.scores.map(s => s.total ? s.score / s.total : 0)) : null;
+          return el("div", { class: "ligne" },
+            el("div", { class: "contenu" }, el("strong", {}, q.titre),
+              el("div", { class: "verso" }, pluriel(q.questions.length, "question") + (meilleur !== null ? ` · meilleur score ${Math.round(meilleur * 100)} %` : " · jamais fait"))),
+            el("div", { class: "boutons" },
+              el("button", { class: "petit principal", onclick: () => aller("quiz", p.id, q.id) }, "▶ Faire"),
+              el("button", { class: "petit", "aria-label": "Modifier le quiz", title: "Modifier", onclick: () => aller("editerQuiz", p.id, q.id) }, "✎"),
+              el("button", { class: "petit danger", "aria-label": "Supprimer le quiz", title: "Supprimer", onclick: () => supprimerQuiz(p, q) }, "✕")));
+        }) : el("div", { class: "unie vide" }, "Aucun quiz. Crée-en un à la main, avec tes fiches, ou depuis un cours."));
+    }
+  },
+
+  reviser(pid, mode) {
+    const p = paquet(pid);
+    if (!p) return aller("accueil");
+    let file = melanger(mode === "tout" ? p.cartes : aRevoir(p)).map(c => ({ c, deja: false }));
+    const total = file.length;
+    if (!total) return aller("paquet", pid);
+    let faites = 0, sues = 0, ratees = 0;
+    const zone = el("div");
+    montrer(retour(p.nom, "paquet", pid), zone);
+
+    let retourner = () => {}, boutonsVisibles = () => false;
+    const afficher = () => {
+      if (!file.length) {
+        zone.replaceChildren(el("div", { class: "fiche fin scene" },
+          el("div", { class: "main" }, "Bien joué !"),
+          el("h1", { style: "margin-top:10px" }, "Révision terminée"),
+          el("p", {}, `${pluriel(total, "fiche")} · `, el("span", { class: "surligne" }, `${sues} sue${sues > 1 ? "s" : ""} du premier coup`), ` · ${ratees} ratée${ratees > 1 ? "s" : ""}`),
+          el("p", { class: "sous", style: "margin:8px auto 20px" }, ratees ? "Les fiches ratées reviendront dès demain." : "Les fiches sues reviendront dans quelques jours."),
+          el("div", { class: "rangee centre" },
+            el("button", { class: "principal", onclick: () => aller("paquet", pid) }, "Retour au paquet"),
+            p.quiz.length ? el("button", { onclick: () => aller("paquet", pid, "quiz") }, "Faire un quiz") : null)));
+        return;
+      }
+      const { c, deja } = file[0];
+      let retournee = false;
+      const carte = el("div", { class: "carte", tabindex: "0", role: "button", "aria-label": "Retourner la fiche", onclick: () => retourner() },
+        el("div", { class: "face fiche" }, el("span", { class: "main" }, "Question"), el("div", { class: "texte" }, c.recto)),
+        el("div", { class: "face fiche dos" }, el("span", { class: "main" }, "Réponse"), el("div", { class: "texte" }, c.verso)));
+      const boutons = el("div", { class: "reponses", style: "visibility:hidden" },
+        el("button", { class: "non", onclick: () => repondre(false) }, "✗ Je ne savais pas"),
+        el("button", { class: "oui", onclick: () => repondre(true) }, "✓ Je savais"));
+      const restantes = file.length - (total - faites);
+      zone.replaceChildren(
+        el("div", { class: "chiffres" }, (deja ? "Fiche ratée : on la refait" : `Fiche ${faites + 1} sur ${total}`) + (restantes > 0 ? ` · ${restantes} à refaire` : "")),
+        el("div", { class: "progression" }, el("div", { style: `width:${faites / total * 100}%` })),
+        el("div", { class: "scene" }, carte),
+        el("p", { class: "aide" }, "Touche la fiche pour voir la réponse · clavier : ", el("span", { class: "touche" }, "Espace"), " retourner, ", el("span", { class: "touche" }, "←"), " ", el("span", { class: "touche" }, "→"), " répondre"),
+        boutons);
+      retourner = () => { retournee = !retournee; carte.classList.toggle("retournee", retournee); boutons.style.visibility = "visible"; };
+      boutonsVisibles = () => boutons.style.visibility === "visible";
+      requestAnimationFrame(() => {
+        const h = Math.max(...[...carte.querySelectorAll(".texte")].map(t => t.scrollHeight + 100), 300);
+        carte.style.minHeight = Math.min(h, window.innerHeight * 0.72) + "px";
+      });
+    };
+    const repondre = su => {
+      const entree = file.shift();
+      const c = entree.c;
+      if (!entree.deja) {
+        faites++; if (su) sues++; else ratees++;
+        // Seule la première réponse de la séance compte pour la répétition espacée
+        c.vues++;
+        c.boite = su ? Math.min(5, Math.max(1, c.boite + 1)) : 1;
+        c.prochaine = maintenant() + ATTENTE_JOURS[c.boite - 1] * JOUR;
+        sauver();
+      }
+      if (!su) file.push({ c, deja: true });  // une fiche ratée revient en fin de séance
+      afficher();
+    };
+    const clavier = e => {
+      if (document.querySelector(".voile") || !file.length) return;
+      if (e.key === " " || e.key === "Enter") { e.preventDefault(); retourner(); }
+      else if (boutonsVisibles() && (e.key === "1" || e.key === "ArrowLeft")) repondre(false);
+      else if (boutonsVisibles() && (e.key === "2" || e.key === "ArrowRight")) repondre(true);
+    };
+    document.addEventListener("keydown", clavier);
+    nettoyage = () => document.removeEventListener("keydown", clavier);
+    afficher();
+  },
+
+  quiz(pid, qid) {
+    const p = paquet(pid);
+    const q = p && p.quiz.find(x => x.id === qid);
+    if (!q) return aller("paquet", pid, "quiz");
+    const questions = q.questions;
+    const reponses = new Array(questions.length).fill(null);
+    let i = 0;
+    const zone = el("div");
+    montrer(retour(p.nom, "paquet", pid, "quiz"), el("h1", {}, q.titre), zone);
+
+    const afficher = () => {
+      const question = questions[i];
+      const derniere = i === questions.length - 1;
+      zone.replaceChildren(
+        el("div", { class: "chiffres", style: "margin-top:10px" }, `Question ${i + 1} sur ${questions.length}`),
+        el("div", { class: "progression" }, el("div", { style: `width:${i / questions.length * 100}%` })),
+        el("div", { class: "unie" },
+          el("div", { class: "question" }, question.question),
+          el("div", { class: "choix" }, question.choix.map((c, k) =>
+            el("button", { "aria-pressed": String(reponses[i] === k), onclick: () => { reponses[i] = k; afficher(); } },
+              el("span", { class: "lettre" }, LETTRES[k]), el("span", {}, c)))),
+          el("div", { class: "rangee ecarte" },
+            el("button", { disabled: i === 0, onclick: () => { i--; afficher(); } }, "← Précédente"),
+            derniere
+              ? el("button", { class: "principal", disabled: reponses[i] === null, onclick: terminer }, "Voir mon score")
+              : el("button", { class: "principal", disabled: reponses[i] === null, onclick: () => { i++; afficher(); } }, "Suivante →"))));
+    };
+    const terminer = () => {
+      const score = questions.reduce((s, x, k) => s + (reponses[k] === x.bonne ? 1 : 0), 0);
+      q.scores.push({ date: maintenant(), score, total: questions.length });
+      q.scores = q.scores.slice(-50);
+      sauver();
+      const pct = Math.round(score / questions.length * 100);
+      zone.replaceChildren(
+        el("div", { class: "fiche fin", style: "margin-top:16px" },
+          el("div", { class: "main" }, pct === 100 ? "Parfait !" : pct >= 50 ? "Pas mal !" : "On s'accroche"),
+          el("div", { class: "score", style: `color:var(${pct >= 50 ? "--bon" : "--mauvais"});margin-top:12px` }, `${score}/${questions.length}`),
+          el("p", { style: "margin:10px 0 20px" }, pct === 100 ? "Tout est juste." : pct >= 75 ? "Très bien, relis les erreurs ci-dessous." : pct >= 50 ? "Relis la correction ci-dessous." : "À retravailler : relis la correction, puis révise les fiches."),
+          el("div", { class: "rangee centre" },
+            el("button", { class: "principal", onclick: () => vues.quiz(pid, qid) }, "↻ Recommencer"),
+            el("button", { onclick: () => aller("paquet", pid, "quiz") }, "Retour au paquet"))),
+        el("h2", {}, "Correction"),
+        el("div", { class: "pile", style: "gap:8px" }, questions.map((x, k) => {
+          const juste = reponses[k] === x.bonne;
+          return el("div", { class: "ligne correction " + (juste ? "juste" : "faux") },
+            el("div", { class: "contenu" },
+              el("strong", {}, `${juste ? "✓" : "✗"} ${k + 1}. ${x.question}`),
+              !juste ? el("div", { class: "r mauvaise" }, `Ta réponse : ${LETTRES[reponses[k]]}. ${x.choix[reponses[k]]}`) : null,
+              el("div", { class: "r bonne" }, `${juste ? "Ta réponse" : "Bonne réponse"} : ${LETTRES[x.bonne]}. ${x.choix[x.bonne]}`),
+              x.explication ? el("div", { class: "explication" }, x.explication) : null));
+        })));
+      window.scrollTo(0, 0);
+    };
+    afficher();
+  },
+
+  generer(pidCible) {
+    const cible = pidCible && paquet(pidCible);
+    let fichier = null;
+    const texte = el("textarea", { id: "cours", rows: 9, placeholder: "Colle ici le texte de ton cours…" });
+    const entree = el("input", { id: "fichier-cours", type: "file", accept: ".pdf,.docx,.txt,.md", hidden: true, onchange: () => choisir(entree.files[0]) });
+    const invitation = () => ["Ou choisis un fichier : ", el("strong", {}, "PDF, Word (.docx) ou texte (.txt)"), el("br"), "touche ici ou glisse-le dans ce cadre"];
+    const nomFichierAffiche = el("div", {}, invitation());
+    const depot = el("div", { class: "depot", role: "button", tabindex: "0", onclick: () => entree.click(),
+      onkeydown: e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); entree.click(); } },
+      ondragover: e => { e.preventDefault(); depot.classList.add("survol"); },
+      ondragleave: () => depot.classList.remove("survol"),
+      ondrop: e => { e.preventDefault(); depot.classList.remove("survol"); choisir(e.dataTransfer.files[0]); } }, nomFichierAffiche, entree);
+    const choisir = f => {
+      if (!f) return;
+      if (f.size > 20 * 1024 * 1024) return notif("Fichier trop gros (20 Mo au plus).");
+      if (!/\.(pdf|docx|txt|md)$/i.test(f.name)) return notif("Envoie un PDF, un Word (.docx) ou un texte (.txt).");
+      fichier = f;
+      nomFichierAffiche.replaceChildren("📄 ", el("strong", {}, f.name), ` (${Math.max(1, Math.round(f.size / 1024))} Ko) `,
+        el("button", { class: "petit", onclick: e => { e.stopPropagation(); fichier = null; entree.value = ""; nomFichierAffiche.replaceChildren(...invitation()); } }, "Retirer"));
+    };
+    const nbCartes = el("select", { id: "nb-cartes" }, [["", "Selon le cours"], ["10", "10"], ["20", "20"], ["30", "30"], ["40", "40"]].map(([v, t]) => el("option", { value: v }, t)));
+    const nbQuestions = el("select", { id: "nb-questions" }, [["", "Selon le cours"], ["5", "5"], ["10", "10"], ["15", "15"], ["20", "20"]].map(([v, t]) => el("option", { value: v }, t)));
+    const erreur = el("div");
+    const formulaire = el("div", {},
+      retour(cible ? cible.nom : "Mes paquets", ...(cible ? ["paquet", cible.id] : ["accueil"])),
+      el("h1", {}, "Créer des fiches depuis un cours"),
+      el("p", { class: "sous", style: "margin-bottom:18px" }, "Claude lit ton cours et prépare des fiches et un QCM. Tu relis et corriges tout avant d'enregistrer."),
+      encartCle(),
+      el("div", { class: "unie", style: "margin-top:14px" },
+        el("label", { for: "cours", style: "margin-top:0" }, "Texte du cours"), texte,
+        el("div", { style: "margin-top:12px" }, depot),
+        el("div", { class: "deux" },
+          el("div", {}, el("label", { for: "nb-cartes" }, "Nombre de fiches"), nbCartes),
+          el("div", {}, el("label", { for: "nb-questions" }, "Questions de quiz"), nbQuestions)),
+        erreur,
+        el("div", { class: "rangee", style: "margin-top:16px" }, el("button", { class: "principal", onclick: lancer }, "✨ Préparer les fiches et le quiz"))));
+    montrer(formulaire);
+
+    async function lancer() {
+      erreur.replaceChildren();
+      if (!texte.value.trim() && !fichier) return erreur.replaceChildren(alerte("Colle le texte du cours ou choisis un fichier."));
+      const cle = lireCle();
+      if (!cle) return erreur.replaceChildren(alerte("Enregistre d'abord une clé Claude (cadre ci-dessus). Sans clé, tu peux toujours écrire tes fiches à la main."));
+      const etat = el("p", { class: "sous", style: "margin:8px auto 0" }, "Lecture du fichier…");
+      const ctl = new AbortController();
+      montrer(el("div", { class: "chargement" },
+        el("div", { class: "crayon", "aria-hidden": "true" }),
+        el("h2", { style: "margin-top:0" }, "Claude lit ton cours…"), etat,
+        el("p", { class: "chiffres", style: "margin-top:6px" }, "Compte une à deux minutes pour un long cours."),
+        el("div", { class: "rangee centre", style: "margin-top:18px" }, el("button", { onclick: () => ctl.abort() }, "Arrêter"))));
+      app.querySelector(".crayon").innerHTML = '<svg viewBox="0 0 64 64"><rect x="8" y="14" width="40" height="30" rx="2" fill="var(--fiche)" stroke="var(--encre)" stroke-width="2"/><path d="M8 21h40" stroke="var(--marge)" stroke-width="2"/><path d="M13 29h28M13 35h20" stroke="var(--bleu)" stroke-width="2" opacity=".5"/><path d="M40 50l14-22 4 3-14 22-6 3z" fill="var(--bleu)"/></svg>';
+      nettoyage = () => ctl.abort();
+      try {
+        const blocs = [];
+        if (fichier) blocs.push(await blocFichier(fichier));
+        if (texte.value.trim()) blocs.push({ type: "text", text: "Cours :\n\n" + texte.value.trim().slice(0, 300000) });
+        if (ctl.signal.aborted) throw { code: "cancelled" };
+        etat.textContent = "Claude lit et prépare tes fiches…";
+        const r = nettoyerResultat(await appelerClaude(cle, blocs, nbCartes.value, nbQuestions.value, ctl.signal));
+        if (!r.cartes.length && !r.quiz.length) throw new Error("Claude n'a rien trouvé à réviser dans ce cours.");
+        nettoyage = null;
+        brouillon = { ...r, paquet: cible ? cible.id : "" };
+        aller("relire");
+      } catch (e) {
+        nettoyage = null;
+        montrer(formulaire);
+        if (e && (e.code === "cancelled" || e.name === "AbortError")) return;
+        erreur.replaceChildren(alerte(messageErreur(e)));
+      }
+    }
+  },
+
+  relire() {
+    if (!brouillon) return aller("generer");
+    const b = brouillon;
+    const destination = el("select", { id: "destination", onchange: () => { nouveau.hidden = !!destination.value; } },
+      el("option", { value: "" }, "Un nouveau paquet"), donnees.paquets.map(p => el("option", { value: p.id }, `Le paquet « ${p.nom} »`)));
+    destination.value = b.paquet || "";
+    const nom = el("input", { id: "nom-paquet", type: "text", value: b.titre, maxlength: 120 });
+    const matiere = el("input", { id: "matiere-paquet", type: "text", value: b.matiere, maxlength: 80 });
+    const nouveau = el("div", { class: "deux", hidden: !!b.paquet },
+      el("div", {}, el("label", { for: "nom-paquet" }, "Nom du paquet"), nom), el("div", {}, el("label", { for: "matiere-paquet" }, "Matière"), matiere));
+    const listeCartes = el("div", { class: "pile", style: "gap:8px" });
+    const editeurQuiz = editeurQuestions(b.quiz);
+    const titreQuiz = el("input", { id: "titre-quiz", type: "text", value: "Quiz – " + b.titre, maxlength: 120 });
+    const titreCartes = el("h2", {});
+    const dessinerCartes = () => {
+      titreCartes.textContent = `Fiches (${b.cartes.length})`;
+      listeCartes.replaceChildren(...b.cartes.map((c, k) => {
+        const recto = el("textarea", { rows: 2, "aria-label": `Fiche ${k + 1}, recto`, oninput: () => c.recto = recto.value }); recto.value = c.recto;
+        const verso = el("textarea", { rows: 2, "aria-label": `Fiche ${k + 1}, verso`, oninput: () => c.verso = verso.value }); verso.value = c.verso;
+        return el("div", { class: "edition" },
+          el("div", { class: "entete" }, el("span", { class: "etiq" }, `Fiche ${k + 1}`), el("button", { class: "petit danger", onclick: () => { b.cartes.splice(k, 1); dessinerCartes(); } }, "Retirer")),
+          el("label", {}, "Recto (question)"), recto, el("label", {}, "Verso (réponse)"), verso);
+      }));
+    };
+    dessinerCartes();
+    const erreur = el("div");
+    montrer(
+      el("h1", {}, "Relis avant d'enregistrer"),
+      el("p", { class: "sous", style: "margin-bottom:18px" }, "Corrige ce qui ne va pas, retire ce qui ne sert pas, puis enregistre."),
+      el("div", { class: "unie" }, el("label", { for: "destination", style: "margin-top:0" }, "Ranger dans"), destination, nouveau),
+      titreCartes, listeCartes,
+      el("div", { class: "rangee", style: "margin-top:10px" }, el("button", { onclick: () => { b.cartes.push({ recto: "", verso: "" }); dessinerCartes(); } }, "＋ Ajouter une fiche")),
+      el("h2", {}, `Quiz (${pluriel(b.quiz.length, "question")})`),
+      b.quiz.length ? el("div", { class: "unie", style: "margin-bottom:10px" }, el("label", { for: "titre-quiz", style: "margin-top:0" }, "Titre du quiz"), titreQuiz) : null,
+      editeurQuiz.element,
+      erreur,
+      el("div", { class: "rangee", style: "margin-top:22px" },
+        el("button", { class: "principal", onclick: enregistrer }, "✓ Enregistrer"),
+        el("button", { onclick: async () => { if (await confirmer("Tout jeter ?", "Les fiches et le quiz préparés seront perdus.", "Tout jeter")) { brouillon = null; aller("accueil"); } } }, "Tout jeter")));
+
+    function enregistrer() {
+      erreur.replaceChildren();
+      const cartes = b.cartes.filter(c => c.recto.trim() || c.verso.trim());
+      if (cartes.some(c => !c.recto.trim() || !c.verso.trim())) return erreur.replaceChildren(alerte("Une fiche a un recto ou un verso vide : complète-la ou retire-la."));
+      let questions;
+      try { questions = questionsValides(editeurQuiz.questions()); } catch (e) { return erreur.replaceChildren(alerte(e.message)); }
+      let p = destination.value && paquet(destination.value);
+      if (!p) {
+        if (!nom.value.trim()) return erreur.replaceChildren(alerte("Donne un nom au paquet."));
+        p = { id: id(), nom: nom.value.trim(), matiere: matiere.value.trim(), cartes: [], quiz: [] };
+        donnees.paquets.unshift(p);
+      }
+      p.cartes.push(...cartes.map(c => nouvelleCarte(c.recto.trim(), c.verso.trim())));
+      if (questions.length) p.quiz.push(nouveauQuiz(titreQuiz.value.trim() || "Quiz", questions));
+      sauver();
+      brouillon = null;
+      notif("Enregistré !");
+      aller("paquet", p.id);
+    }
+  },
+
+  editerQuiz(pid, qid) {
+    const p = paquet(pid);
+    if (!p) return aller("accueil");
+    const existant = qid && p.quiz.find(x => x.id === qid);
+    const questions = existant ? JSON.parse(JSON.stringify(existant.questions)) : [{ question: "", choix: ["", "", "", ""], bonne: null, explication: "" }];
+    const titre = el("input", { id: "titre-quiz", type: "text", value: existant ? existant.titre : "", placeholder: "Ex. : Chapitre 2", maxlength: 120 });
+    const editeur = editeurQuestions(questions);
+    const erreur = el("div");
+    montrer(
+      retour(p.nom, "paquet", pid, "quiz"),
+      el("h1", {}, existant ? "Modifier le quiz" : "Nouveau quiz"),
+      el("p", { class: "sous", style: "margin-bottom:18px" }, "Pour chaque question, écris les choix et coche le rond de la bonne réponse."),
+      el("div", { class: "unie", style: "margin-bottom:10px" }, el("label", { for: "titre-quiz", style: "margin-top:0" }, "Titre du quiz"), titre),
+      editeur.element, erreur,
+      el("div", { class: "rangee", style: "margin-top:22px" }, el("button", { class: "principal", onclick: () => {
+        erreur.replaceChildren();
+        try {
+          if (!titre.value.trim()) throw new Error("Donne un titre au quiz.");
+          const qs = questionsValides(editeur.questions());
+          if (!qs.length) throw new Error("Ajoute au moins une question.");
+          if (existant) { existant.titre = titre.value.trim(); existant.questions = qs; }
+          else p.quiz.push(nouveauQuiz(titre.value.trim(), qs));
+          sauver(); notif("Quiz enregistré"); aller("paquet", pid, "quiz");
+        } catch (e) { erreur.replaceChildren(alerte(e.message)); }
+      } }, "✓ Enregistrer le quiz")));
+  },
+};
+
+// Éditeur de questions de QCM, partagé par la relecture et la création à la main
+function editeurQuestions(questions) {
+  const element = el("div");
+  const liste = el("div", { class: "pile", style: "gap:8px" });
+  const dessiner = () => liste.replaceChildren(...questions.map((q, k) => {
+    const groupe = "bonne-" + k + "-" + Math.random().toString(36).slice(2);
+    const enonce = el("textarea", { rows: 2, "aria-label": `Question ${k + 1}`, oninput: () => q.question = enonce.value }); enonce.value = q.question;
+    const explication = el("textarea", { rows: 2, "aria-label": `Explication de la question ${k + 1}`, placeholder: "Facultatif : pourquoi c'est la bonne réponse", oninput: () => q.explication = explication.value }); explication.value = q.explication || "";
+    return el("div", { class: "edition" },
+      el("div", { class: "entete" }, el("span", { class: "etiq" }, `Question ${k + 1}`), el("button", { class: "petit danger", onclick: () => { questions.splice(k, 1); dessiner(); } }, "Retirer")),
+      el("label", {}, "Question"), enonce,
+      el("label", {}, "Choix (coche la bonne réponse)"),
+      q.choix.map((c, j) => {
+        const champ = el("input", { type: "text", value: c, placeholder: "Choix " + LETTRES[j], "aria-label": `Choix ${LETTRES[j]}`, oninput: () => q.choix[j] = champ.value });
+        return el("div", { class: "ligne-choix" },
+          el("input", { type: "radio", name: groupe, checked: q.bonne === j, "aria-label": "Bonne réponse : choix " + LETTRES[j], onchange: () => q.bonne = j }),
+          el("span", { class: "lettre" }, LETTRES[j]), champ,
+          q.choix.length > 2 ? el("button", { class: "petit", title: "Retirer ce choix", "aria-label": "Retirer le choix " + LETTRES[j], onclick: () => {
+            q.choix.splice(j, 1); if (q.bonne === j) q.bonne = null; else if (q.bonne > j) q.bonne--; dessiner(); } }, "✕") : null);
+      }),
+      q.choix.length < 6 ? el("button", { class: "lien", onclick: () => { q.choix.push(""); dessiner(); } }, "＋ Ajouter un choix") : null,
+      el("label", {}, "Explication"), explication);
+  }));
+  dessiner();
+  element.append(liste, el("div", { class: "rangee", style: "margin-top:10px" }, el("button", { onclick: () => {
+    questions.push({ question: "", choix: ["", "", "", ""], bonne: null, explication: "" }); dessiner();
+    liste.lastChild.querySelector("textarea").focus();
+  } }, "＋ Ajouter une question")));
+  // Les questions entièrement vides sont ignorées
+  return { element, questions: () => questions.filter(q => q.question.trim() || q.choix.some(c => c.trim())) };
+}
+
+function questionsValides(questions) {
+  return questions.map((q, k) => {
+    const n = k + 1;
+    if (!q.question.trim()) throw new Error(`Question ${n} : écris l'énoncé.`);
+    const choix = q.choix.map(c => c.trim());
+    if (choix.some(c => !c)) throw new Error(`Question ${n} : un choix est vide, remplis-le ou retire-le.`);
+    if (choix.length < 2) throw new Error(`Question ${n} : il faut au moins 2 choix.`);
+    if (q.bonne === null || q.bonne === undefined || q.bonne >= choix.length) throw new Error(`Question ${n} : coche la bonne réponse.`);
+    return { question: q.question.trim(), choix, bonne: q.bonne, explication: (q.explication || "").trim() };
+  });
+}
+
+// ---------- Claude (avec la clé de chaque personne, gardée sur son appareil) ----------
+const MODELE = "claude-opus-5-5";
+const CLE_CLAUDE = "bristol.cle-claude";
+function lireCle() { try { return localStorage.getItem(CLE_CLAUDE) || ""; } catch (_) { return ""; } }
+function ecrireCle(v) { try { if (v) localStorage.setItem(CLE_CLAUDE, v); else localStorage.removeItem(CLE_CLAUDE); return true; } catch (_) { return false; } }
+
+function encartCle() {
+  const boite = el("div", { class: "unie" });
+  const dessiner = () => {
+    if (lireCle()) {
+      boite.replaceChildren(el("div", { class: "rangee ecarte" },
+        el("span", {}, "🔑 Ta clé Claude est enregistrée sur cet appareil."),
+        el("button", { class: "petit danger", onclick: () => { ecrireCle(""); notif("Clé retirée de cet appareil"); dessiner(); } }, "Retirer la clé")));
+      return;
+    }
+    const champ = el("input", { id: "cle-claude", type: "password", autocomplete: "off", spellcheck: "false", placeholder: "sk-ant-…" });
+    const err = el("div");
+    boite.replaceChildren(
+      el("div", { class: "etiq" }, "Clé Claude"),
+      el("p", { style: "margin-top:6px" }, "Pour que Claude prépare tes fiches, colle ta propre clé Claude. Elle reste sur cet appareil et n'est envoyée qu'à Claude."),
+      el("p", { class: "sous", style: "margin-top:6px;font-size:15px" }, "Pas de clé ? Crée-la sur ", el("a", { href: "https://console.anthropic.com/settings/keys", target: "_blank", rel: "noopener" }, "console.anthropic.com"), ", menu API Keys. C'est payant à l'usage : quelques centimes par cours, sans abonnement (Claude Pro ne suffit pas)."),
+      el("label", { for: "cle-claude" }, "Ta clé"), champ, err,
+      el("div", { class: "rangee", style: "margin-top:10px" }, el("button", { onclick: () => {
+        const v = champ.value.trim();
+        if (!/^sk-ant-[\w-]{20,}$/.test(v)) return err.replaceChildren(alerte("Ça ne ressemble pas à une clé Claude : elle commence par sk-ant-."));
+        if (!ecrireCle(v)) return err.replaceChildren(alerte("Ce navigateur bloque l'enregistrement (fenêtre privée ?)."));
+        notif("Clé enregistrée sur cet appareil"); dessiner();
+      } }, "Enregistrer la clé sur cet appareil")));
+  };
+  dessiner();
+  return boite;
+}
+
+const CONSIGNES = `Tu aides un étudiant à réviser. À partir du cours fourni, crée des flashcards et un quiz en français.
+
+Flashcards :
+- Couvre tout le cours : définitions, notions clés, fonctions (rôle, paramètres, valeur renvoyée, exemple d'usage), formules, propriétés, dates ou étapes importantes.
+- Recto : une question courte et précise. Verso : la réponse, brève (1 à 3 phrases, ou un petit exemple).
+- Une seule idée par carte. Pas de doublons.
+
+Quiz (QCM) :
+- Chaque question a exactement 4 choix, une seule bonne réponse ; « bonne » est la position de la bonne réponse (0 pour le premier choix). Varie cette position d'une question à l'autre.
+- Les mauvais choix doivent être plausibles. « explication » dit en une ou deux phrases pourquoi la bonne réponse est juste.
+- Teste la compréhension, pas seulement la mémoire mot à mot.
+
+N'invente rien qui ne soit pas dans le cours. « titre » : un titre court pour le paquet ; « matiere » : la matière (ex. Mathématiques, Programmation, Histoire).`;
+
+const SCHEMA = {
+  type: "object",
+  properties: {
+    titre: { type: "string" }, matiere: { type: "string" },
+    cartes: { type: "array", items: { type: "object", properties: { recto: { type: "string" }, verso: { type: "string" } }, required: ["recto", "verso"], additionalProperties: false } },
+    quiz: { type: "array", items: { type: "object", properties: { question: { type: "string" }, choix: { type: "array", items: { type: "string" } }, bonne: { type: "integer" }, explication: { type: "string" } }, required: ["question", "choix", "bonne", "explication"], additionalProperties: false } },
+  },
+  required: ["titre", "matiere", "cartes", "quiz"], additionalProperties: false,
+};
+
+async function appelerClaude(cle, blocs, nbCartes, nbQuestions, signal) {
+  const nombre = (nbCartes ? `Fais ${nbCartes} flashcards.` : "Choisis le nombre de flashcards selon la longueur du cours (entre 8 et 40).")
+    + " " + (nbQuestions ? `Fais ${nbQuestions} questions de quiz.` : "Choisis le nombre de questions selon la longueur du cours (entre 5 et 20).");
+  let r;
+  try {
+    r = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST", signal,
+      headers: { "content-type": "application/json", "x-api-key": cle, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" },
+      body: JSON.stringify({
+        model: MODELE, max_tokens: 32000, system: CONSIGNES,
+        messages: [{ role: "user", content: [...blocs, { type: "text", text: nombre }] }],
+        output_config: { effort: "medium", format: { type: "json_schema", schema: SCHEMA } },
+      }),
+    });
+  } catch (e) {
+    if (e && e.name === "AbortError") throw e;
+    throw new Error("Impossible de joindre Claude : vérifie ta connexion Internet.");
+  }
+  let d = {};
+  try { d = await r.json(); } catch (_) {}
+  if (!r.ok) {
+    const msg = String(d.error && d.error.message || "");
+    if (r.status === 401) throw new Error("Clé Claude refusée : vérifie la clé (retire-la puis colle-la à nouveau).");
+    if (r.status === 403) throw new Error("Cette clé Claude n'a pas le droit d'utiliser ce modèle.");
+    if (r.status === 413) throw new Error("Le cours est trop gros pour une seule fois : découpe-le en plusieurs parties.");
+    if (r.status === 429) throw new Error("Trop de demandes à Claude : attends une minute et réessaie.");
+    if (/credit|billing/i.test(msg)) throw new Error("Plus de crédit sur ce compte Claude : recharge-le sur console.anthropic.com.");
+    if (r.status === 400) throw new Error("Claude a refusé la demande : " + (msg || "cours illisible ou trop long."));
+    throw new Error(`Claude ne répond pas correctement (erreur ${r.status}) : réessaie plus tard.`);
+  }
+  if (d.stop_reason === "refusal") throw new Error("Claude a refusé de traiter ce cours.");
+  if (d.stop_reason === "max_tokens") throw new Error("Le cours est trop long pour une seule fois : découpe-le en plusieurs parties.");
+  const texte = ((d.content || []).find(b => b.type === "text") || {}).text || "";
+  try { return JSON.parse(texte); } catch (_) { throw new Error("La réponse de Claude n'a pas pu être lue : réessaie."); }
+}
+
+function messageErreur(e) {
+  return e instanceof Error ? e.message : "Quelque chose s'est mal passé : réessaie.";
+}
+
+// Garde seulement les fiches et questions complètes et cohérentes
+function nettoyerResultat(r) {
+  r = r && typeof r === "object" ? r : {};
+  const cartes = (Array.isArray(r.cartes) ? r.cartes : [])
+    .map(c => ({ recto: String(c && c.recto || "").trim(), verso: String(c && c.verso || "").trim() }))
+    .filter(c => c.recto && c.verso);
+  const quiz = [];
+  for (const q of Array.isArray(r.quiz) ? r.quiz : []) {
+    if (!q) continue;
+    const choix = (Array.isArray(q.choix) ? q.choix : []).map(x => String(x).trim()).filter(Boolean);
+    const bonne = Number(q.bonne);
+    if (String(q.question || "").trim() && choix.length >= 2 && choix.length <= 6 && Number.isInteger(bonne) && bonne >= 0 && bonne < choix.length)
+      quiz.push({ question: String(q.question).trim(), choix, bonne, explication: String(q.explication || "").trim() });
+  }
+  return { titre: String(r.titre || "").trim() || "Nouveau cours", matiere: String(r.matiere || "").trim(), cartes, quiz };
+}
+
+function messageErreur(e) {
+  if (e instanceof Error) return e.message;
+  const messages = {
+    not_granted: "Tu n'as pas autorisé la page à utiliser Claude. Recharge la page pour qu'elle te le redemande.",
+    sampling_disabled: "Claude n'est pas disponible pour ton compte.",
+    rate_limited: "Trop de demandes à Claude, ou limite d'utilisation atteinte : réessaie un peu plus tard.",
+    session_expired: "Ta connexion à Claude a expiré : reconnecte-toi puis réessaie.",
+    prompt_too_large: "Le cours est trop long pour une seule fois : découpe-le en plusieurs parties.",
+    refused: "Claude a refusé de traiter ce cours.",
+    invalid_json: "La réponse de Claude n'a pas pu être lue : réessaie.",
+    empty_completion: "Claude n'a rien répondu : réessaie avec un cours plus court.",
+  };
+  return messages[e && e.code] || "Claude ne répond pas pour l'instant : réessaie dans un moment.";
+}
+
+// ---------- Lecture des fichiers de cours ----------
+function chargerScript(src) {
+  return new Promise((ok, ko) => {
+    if (document.querySelector(`script[src="${src}"]`)) return ok();
+    const s = document.createElement("script");
+    s.src = src; s.onload = ok; s.onerror = () => ko(new Error("Impossible de charger le lecteur de fichiers : vérifie ta connexion Internet."));
+    document.head.append(s);
+  });
+}
+async function blocFichier(f) {
+  const nom = f.name.toLowerCase();
+  if (nom.endsWith(".pdf")) {
+    const octets = new Uint8Array(await f.arrayBuffer());
+    let binaire = "";
+    for (let i = 0; i < octets.length; i += 0x8000) binaire += String.fromCharCode(...octets.subarray(i, i + 0x8000));
+    return { type: "document", source: { type: "base64", media_type: "application/pdf", data: btoa(binaire) } };
+  }
+  let texte;
+  if (nom.endsWith(".txt") || nom.endsWith(".md")) texte = (await f.text()).trim();
+  else if (nom.endsWith(".docx")) {
+    await chargerScript("https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js");
+    let xml;
+    try { xml = await (await JSZip.loadAsync(await f.arrayBuffer())).file("word/document.xml").async("string"); }
+    catch (_) { throw new Error("Ce fichier Word n'a pas pu être lu (il est peut-être abîmé, ou c'est un ancien .doc)."); }
+    const doc = new DOMParser().parseFromString(xml, "application/xml");
+    texte = [...doc.getElementsByTagName("w:p")].map(p =>
+      [...p.getElementsByTagName("*")].map(n => n.tagName === "w:t" ? n.textContent : n.tagName === "w:tab" ? "\t" : n.tagName === "w:br" ? "\n" : "").join("")
+    ).join("\n").trim();
+  } else throw new Error("Envoie un PDF, un Word (.docx) ou un texte (.txt).");
+  if (!texte) throw new Error("Le fichier ne contient pas de texte.");
+  return { type: "text", text: `Cours (fichier ${f.name}) :\n\n${texte.slice(0, 300000)}` };
+}
+
+// ---------- Sauvegarde et partage ----------
+function nomFichier(t) { return t.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-zA-Z0-9]+/g, "-").replace(/^-|-$/g, "").toLowerCase().slice(0, 40) || "paquet"; }
+// Un paquet envoyé à un ami repart de zéro : pas ses scores ni sa progression
+function partageable(p) {
+  return { nom: p.nom, matiere: p.matiere, cartes: p.cartes.map(c => ({ recto: c.recto, verso: c.verso })), quiz: p.quiz.map(q => ({ titre: q.titre, questions: q.questions })) };
+}
+function telecharger(nom, contenu) {
+  const url = URL.createObjectURL(new Blob([JSON.stringify(contenu, null, 1)], { type: "application/json" }));
+  const a = el("a", { href: url, download: nom, hidden: true });
+  document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
+  notif("Fichier enregistré dans tes téléchargements");
+}
+async function importer(f) {
+  if (!f) return;
+  let recu;
+  try { recu = JSON.parse(await f.text()); } catch (_) { return notif("Ce fichier n'est pas un fichier de fiches Bristol."); }
+  const liste = recu && Array.isArray(recu.paquets) ? recu.paquets : null;
+  if (!liste || !liste.length) return notif("Ce fichier ne contient aucun paquet.");
+  let n = 0;
+  for (const p of liste) {
+    if (!p || !String(p.nom || "").trim()) continue;
+    const cartes = (Array.isArray(p.cartes) ? p.cartes : []).filter(c => c && String(c.recto || "").trim() && String(c.verso || "").trim()).map(c => {
+      const carte = nouvelleCarte(String(c.recto).trim(), String(c.verso).trim());
+      // Une sauvegarde complète garde la progression
+      if (Number.isInteger(c.boite) && c.boite >= 0 && c.boite <= 5) { carte.boite = c.boite; carte.vues = Number(c.vues) || 0; carte.prochaine = Number(c.prochaine) || 0; }
+      return carte;
+    });
+    const quiz = [];
+    for (const q of Array.isArray(p.quiz) ? p.quiz : []) {
+      const propres = nettoyerResultat({ quiz: q && q.questions }).quiz;
+      if (propres.length) quiz.push({ ...nouveauQuiz(String(q.titre || "Quiz").slice(0, 120), propres), scores: Array.isArray(q.scores) ? q.scores.slice(-50) : [] });
+    }
+    donnees.paquets.unshift({ id: id(), nom: String(p.nom).trim().slice(0, 120), matiere: String(p.matiere || "").trim().slice(0, 80), cartes, quiz });
+    n++;
+  }
+  sauver();
+  notif(n ? `${pluriel(n, "paquet")} ajouté${n > 1 ? "s" : ""}` : "Aucun paquet lisible dans ce fichier.");
+  aller("accueil");
+}
+
+// ---------- Actions ----------
+function formulairePaquet(titre, p) {
+  const nom = el("input", { id: "f-nom", type: "text", value: p ? p.nom : "", placeholder: "Ex. : Algorithmique – chapitre 3", maxlength: 120 });
+  const matiere = el("input", { id: "f-matiere", type: "text", value: p ? p.matiere : "", placeholder: "Ex. : Programmation", maxlength: 80 });
+  const erreur = el("div");
+  return fenetre(titre, el("div", {}, el("label", { for: "f-nom", style: "margin-top:0" }, "Nom du paquet"), nom, el("label", { for: "f-matiere" }, "Matière (facultatif)"), matiere, erreur),
+    [{ texte: "Enregistrer", action: () => {
+      if (!nom.value.trim()) { erreur.replaceChildren(alerte("Donne un nom au paquet.")); return false; }
+      return { nom: nom.value.trim(), matiere: matiere.value.trim() };
+    } }]);
+}
+async function nouveauPaquet() {
+  const r = await formulairePaquet("Nouveau paquet");
+  if (!r) return;
+  const p = { id: id(), ...r, cartes: [], quiz: [] };
+  donnees.paquets.unshift(p); sauver(); aller("paquet", p.id);
+}
+async function modifierPaquet(p) {
+  const r = await formulairePaquet("Renommer le paquet", p);
+  if (!r) return;
+  Object.assign(p, r); delete p.exemple; sauver(); rafraichir();
+}
+async function supprimerPaquet(p) {
+  if (!await confirmer("Supprimer ce paquet ?", `« ${p.nom} », ses ${pluriel(p.cartes.length, "fiche")} et ses quiz seront supprimés de ce navigateur.`, "Supprimer")) return;
+  donnees.paquets = donnees.paquets.filter(x => x !== p); sauver(); notif("Paquet supprimé"); aller("accueil");
+}
+async function editerCarte(p, c) {
+  const recto = el("textarea", { id: "f-recto", rows: 3, placeholder: "La question" }); recto.value = c ? c.recto : "";
+  const verso = el("textarea", { id: "f-verso", rows: 3, placeholder: "La réponse" }); verso.value = c ? c.verso : "";
+  const encore = el("input", { type: "checkbox", id: "f-encore", checked: !c });
+  const erreur = el("div");
+  const r = await fenetre(c ? "Modifier la fiche" : "Nouvelle fiche",
+    el("div", {}, el("label", { for: "f-recto", style: "margin-top:0" }, "Recto (question)"), recto, el("label", { for: "f-verso" }, "Verso (réponse)"), verso,
+      !c ? el("label", { style: "font-weight:400;display:flex;gap:8px;align-items:center" }, encore, "Ajouter une autre fiche ensuite") : null, erreur),
+    [{ texte: "Enregistrer", action: () => {
+      if (!recto.value.trim() || !verso.value.trim()) { erreur.replaceChildren(alerte("Remplis le recto et le verso.")); return false; }
+      return { recto: recto.value.trim(), verso: verso.value.trim() };
+    } }]);
+  if (!r) return;
+  if (c) Object.assign(c, r); else p.cartes.push(nouvelleCarte(r.recto, r.verso));
+  sauver(); notif(c ? "Fiche modifiée" : "Fiche ajoutée"); rafraichir();
+  if (!c && encore.checked) editerCarte(p);
+}
+async function supprimerCarte(p, c) {
+  if (!await confirmer("Supprimer cette fiche ?", c.recto, "Supprimer")) return;
+  p.cartes = p.cartes.filter(x => x !== c); sauver(); notif("Fiche supprimée"); rafraichir();
+}
+async function reinitialiser(p) {
+  if (!await confirmer("Tout remettre à revoir ?", "Toutes les fiches du paquet repartent de zéro dans la répétition espacée.", "Tout remettre")) return;
+  for (const c of p.cartes) Object.assign(c, { boite: 0, vues: 0, prochaine: 0 });
+  sauver(); notif("Toutes les fiches sont à revoir"); rafraichir();
+}
+// QCM fabriqué sans Claude : la réponse d'une fiche parmi les réponses d'autres fiches
+function quizDepuisCartes(p) {
+  const cartes = p.cartes.filter(c => c.verso.trim());
+  const questions = [];
+  for (const carte of melanger(cartes).slice(0, 10)) {
+    const autres = [...new Set(cartes.map(c => c.verso).filter(v => v !== carte.verso))];
+    if (autres.length < 3) continue;
+    const choix = melanger([...melanger(autres).slice(0, 3), carte.verso]);
+    questions.push({ question: carte.recto, choix, bonne: choix.indexOf(carte.verso), explication: "" });
+  }
+  if (!questions.length) return notif("Il faut au moins 4 fiches avec des réponses différentes.");
+  const q = nouveauQuiz("Quiz avec mes fiches – " + p.nom, questions);
+  p.quiz.push(q); sauver(); aller("quiz", p.id, q.id);
+}
+async function supprimerQuiz(p, q) {
+  if (!await confirmer("Supprimer ce quiz ?", q.titre, "Supprimer")) return;
+  p.quiz = p.quiz.filter(x => x !== q); sauver(); notif("Quiz supprimé"); rafraichir();
+}
+
+// ---------- Navigation (dans la page) ----------
+function aller(nom, ...args) {
+  if (nettoyage) { nettoyage(); nettoyage = null; }
+  vue = [nom, ...args];
+  const f = vues[nom] || vues.accueil;
+  f(...args);
+  window.scrollTo(0, 0);
+}
+function rafraichir() { const y = window.scrollY; aller(...vue); window.scrollTo(0, y); }
+document.getElementById("marque").addEventListener("click", () => aller("accueil"));
+aller("accueil");
+if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => {});
+</script>
+</body>
+</html>
