@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Bristol Révisions</title>
-<meta name="description" content="Fiches de révision façon bristol : révision espacée, quiz, et fiches préparées par Claude depuis ton cours.">
+<meta name="description" content="Fiches de révision façon bristol : révision espacée, quiz, et fiches préparées gratuitement par l'IA depuis ton cours.">
 <meta name="theme-color" content="#2340d0">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icone.svg" type="image/svg+xml">
@@ -207,7 +207,7 @@ const CLE_STOCKAGE = "bristol.donnees.v1";
 const ATTENTE_JOURS = [1, 2, 4, 8, 16];   // boîtes de Leitner 1 à 5
 const JOUR = 86400;
 const LETTRES = "ABCDEF";
-let nettoyage = null;   // à appeler en quittant une vue (raccourcis clavier, appel à Claude)
+let nettoyage = null;   // à appeler en quittant une vue (raccourcis clavier, appel à l'IA)
 let brouillon = null;   // résultat de génération en cours de relecture
 let vue = ["accueil"];
 
@@ -344,7 +344,7 @@ const vues = {
           }))
         : el("div", { class: "unie vide", style: "margin-top:18px" },
             el("p", {}, "Tu n'as pas encore de paquet."),
-            el("p", {}, "Envoie un cours pour que Claude prépare tes fiches et un quiz, ou crée un paquet et écris tes fiches toi-même.")),
+            el("p", {}, "Envoie un cours pour que l'IA prépare gratuitement tes fiches et un quiz, ou crée un paquet et écris tes fiches toi-même.")),
       el("section", { style: "margin-top:40px" },
         el("h2", { style: "margin:0 0 4px" }, "Paquets à ajouter"),
         el("p", { class: "sous", style: "font-size:15px" }, "Des paquets prêts à réviser, partagés avec le site. Un clic et ils sont dans tes paquets."),
@@ -562,9 +562,9 @@ const vues = {
     const formulaire = el("div", {},
       retour(cible ? cible.nom : "Mes paquets", ...(cible ? ["paquet", cible.id] : ["accueil"])),
       el("h1", {}, "Créer des fiches depuis un cours"),
-      el("p", { class: "sous", style: "margin-bottom:18px" }, "Claude lit ton cours et prépare des fiches et un QCM. Tu relis et corriges tout avant d'enregistrer."),
-      encartCle(),
-      el("div", { class: "unie", style: "margin-top:14px" },
+      el("p", { class: "sous", style: "margin-bottom:18px" }, "L'IA lit ton cours et prépare des fiches et un QCM, gratuitement. Tu relis et corriges tout avant d'enregistrer."),
+      el("div", { class: "info", style: "margin-bottom:14px;font-size:15px" }, "Ton cours est envoyé à Gemini, l'IA de Google, qui peut s'en servir pour s'améliorer : n'y mets rien de personnel."),
+      el("div", { class: "unie" },
         el("label", { for: "cours", style: "margin-top:0" }, "Texte du cours"), texte,
         el("div", { style: "margin-top:12px" }, depot),
         el("div", { class: "deux" },
@@ -577,13 +577,11 @@ const vues = {
     async function lancer() {
       erreur.replaceChildren();
       if (!texte.value.trim() && !fichier) return erreur.replaceChildren(alerte("Colle le texte du cours ou choisis un fichier."));
-      const cle = lireCle();
-      if (!cle) return erreur.replaceChildren(alerte("Enregistre d'abord une clé Claude (cadre ci-dessus). Sans clé, tu peux toujours écrire tes fiches à la main."));
       const etat = el("p", { class: "sous", style: "margin:8px auto 0" }, "Lecture du fichier…");
       const ctl = new AbortController();
       montrer(el("div", { class: "chargement" },
         el("div", { class: "crayon", "aria-hidden": "true" }),
-        el("h2", { style: "margin-top:0" }, "Claude lit ton cours…"), etat,
+        el("h2", { style: "margin-top:0" }, "L'IA lit ton cours…"), etat,
         el("p", { class: "chiffres", style: "margin-top:6px" }, "Compte une à deux minutes pour un long cours."),
         el("div", { class: "rangee centre", style: "margin-top:18px" }, el("button", { onclick: () => ctl.abort() }, "Arrêter"))));
       app.querySelector(".crayon").innerHTML = '<svg viewBox="0 0 64 64"><rect x="8" y="14" width="40" height="30" rx="2" fill="var(--fiche)" stroke="var(--encre)" stroke-width="2"/><path d="M8 21h40" stroke="var(--marge)" stroke-width="2"/><path d="M13 29h28M13 35h20" stroke="var(--bleu)" stroke-width="2" opacity=".5"/><path d="M40 50l14-22 4 3-14 22-6 3z" fill="var(--bleu)"/></svg>';
@@ -593,9 +591,9 @@ const vues = {
         if (fichier) blocs.push(await blocFichier(fichier));
         if (texte.value.trim()) blocs.push({ type: "text", text: "Cours :\n\n" + texte.value.trim().slice(0, 300000) });
         if (ctl.signal.aborted) throw { code: "cancelled" };
-        etat.textContent = "Claude lit et prépare tes fiches…";
-        const r = nettoyerResultat(await appelerClaude(cle, blocs, nbCartes.value, nbQuestions.value, ctl.signal));
-        if (!r.cartes.length && !r.quiz.length) throw new Error("Claude n'a rien trouvé à réviser dans ce cours.");
+        etat.textContent = "L'IA lit et prépare tes fiches…";
+        const r = nettoyerResultat(await appelerIA(blocs, nbCartes.value, nbQuestions.value, ctl.signal));
+        if (!r.cartes.length && !r.quiz.length) throw new Error("L'IA n'a rien trouvé à réviser dans ce cours.");
         nettoyage = null;
         brouillon = { ...r, paquet: cible ? cible.id : "" };
         aller("relire");
@@ -741,97 +739,24 @@ function questionsValides(questions) {
   });
 }
 
-// ---------- Claude (avec la clé de chaque personne, gardée sur son appareil) ----------
-const MODELE = "claude-opus-5-5";
-const CLE_CLAUDE = "bristol.cle-claude";
-function lireCle() { try { return localStorage.getItem(CLE_CLAUDE) || ""; } catch (_) { return ""; } }
-function ecrireCle(v) { try { if (v) localStorage.setItem(CLE_CLAUDE, v); else localStorage.removeItem(CLE_CLAUDE); return true; } catch (_) { return false; } }
+// ---------- IA : Gemini (gratuit), par le petit serveur du site qui garde la clé ----------
+const SERVEUR = "https://afiidrynmcwenbbhkmzs.supabase.co/functions/v1/bristol-fiches";  // fonction Supabase « bristol-fiches » (projet du bot), code dans web/serveur-gemini
 
-function encartCle() {
-  const boite = el("div", { class: "unie" });
-  const dessiner = () => {
-    if (lireCle()) {
-      boite.replaceChildren(el("div", { class: "rangee ecarte" },
-        el("span", {}, "🔑 Ta clé Claude est enregistrée sur cet appareil."),
-        el("button", { class: "petit danger", onclick: () => { ecrireCle(""); notif("Clé retirée de cet appareil"); dessiner(); } }, "Retirer la clé")));
-      return;
-    }
-    const champ = el("input", { id: "cle-claude", type: "password", autocomplete: "off", spellcheck: "false", placeholder: "sk-ant-…" });
-    const err = el("div");
-    boite.replaceChildren(
-      el("div", { class: "etiq" }, "Clé Claude"),
-      el("p", { style: "margin-top:6px" }, "Pour que Claude prépare tes fiches, colle ta propre clé Claude. Elle reste sur cet appareil et n'est envoyée qu'à Claude."),
-      el("p", { class: "sous", style: "margin-top:6px;font-size:15px" }, "Pas de clé ? Crée-la sur ", el("a", { href: "https://console.anthropic.com/settings/keys", target: "_blank", rel: "noopener" }, "console.anthropic.com"), ", menu API Keys. C'est payant à l'usage : quelques centimes par cours, sans abonnement (Claude Pro ne suffit pas)."),
-      el("label", { for: "cle-claude" }, "Ta clé"), champ, err,
-      el("div", { class: "rangee", style: "margin-top:10px" }, el("button", { onclick: () => {
-        const v = champ.value.trim();
-        if (!/^sk-ant-[\w-]{20,}$/.test(v)) return err.replaceChildren(alerte("Ça ne ressemble pas à une clé Claude : elle commence par sk-ant-."));
-        if (!ecrireCle(v)) return err.replaceChildren(alerte("Ce navigateur bloque l'enregistrement (fenêtre privée ?)."));
-        notif("Clé enregistrée sur cet appareil"); dessiner();
-      } }, "Enregistrer la clé sur cet appareil")));
-  };
-  dessiner();
-  return boite;
-}
-
-const CONSIGNES = `Tu aides un étudiant à réviser. À partir du cours fourni, crée des flashcards et un quiz en français.
-
-Flashcards :
-- Couvre tout le cours : définitions, notions clés, fonctions (rôle, paramètres, valeur renvoyée, exemple d'usage), formules, propriétés, dates ou étapes importantes.
-- Recto : une question courte et précise. Verso : la réponse, brève (1 à 3 phrases, ou un petit exemple).
-- Une seule idée par carte. Pas de doublons.
-
-Quiz (QCM) :
-- Chaque question a exactement 4 choix, une seule bonne réponse ; « bonne » est la position de la bonne réponse (0 pour le premier choix). Varie cette position d'une question à l'autre.
-- Les mauvais choix doivent être plausibles. « explication » dit en une ou deux phrases pourquoi la bonne réponse est juste.
-- Teste la compréhension, pas seulement la mémoire mot à mot.
-
-N'invente rien qui ne soit pas dans le cours. « titre » : un titre court pour le paquet ; « matiere » : la matière (ex. Mathématiques, Programmation, Histoire).`;
-
-const SCHEMA = {
-  type: "object",
-  properties: {
-    titre: { type: "string" }, matiere: { type: "string" },
-    cartes: { type: "array", items: { type: "object", properties: { recto: { type: "string" }, verso: { type: "string" } }, required: ["recto", "verso"], additionalProperties: false } },
-    quiz: { type: "array", items: { type: "object", properties: { question: { type: "string" }, choix: { type: "array", items: { type: "string" } }, bonne: { type: "integer" }, explication: { type: "string" } }, required: ["question", "choix", "bonne", "explication"], additionalProperties: false } },
-  },
-  required: ["titre", "matiere", "cartes", "quiz"], additionalProperties: false,
-};
-
-async function appelerClaude(cle, blocs, nbCartes, nbQuestions, signal) {
-  const nombre = (nbCartes ? `Fais ${nbCartes} flashcards.` : "Choisis le nombre de flashcards selon la longueur du cours (entre 8 et 40).")
-    + " " + (nbQuestions ? `Fais ${nbQuestions} questions de quiz.` : "Choisis le nombre de questions selon la longueur du cours (entre 5 et 20).");
+async function appelerIA(blocs, nbCartes, nbQuestions, signal) {
+  if (!SERVEUR) throw new Error("La création depuis un cours n'est pas encore activée sur ce site. Tu peux écrire tes fiches à la main.");
   let r;
   try {
-    r = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST", signal,
-      headers: { "content-type": "application/json", "x-api-key": cle, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" },
-      body: JSON.stringify({
-        model: MODELE, max_tokens: 32000, system: CONSIGNES,
-        messages: [{ role: "user", content: [...blocs, { type: "text", text: nombre }] }],
-        output_config: { effort: "medium", format: { type: "json_schema", schema: SCHEMA } },
-      }),
-    });
+    r = await fetch(SERVEUR, { method: "POST", signal, headers: { "content-type": "application/json" },
+      body: JSON.stringify({ blocs, nb_cartes: nbCartes, nb_questions: nbQuestions }) });
   } catch (e) {
     if (e && e.name === "AbortError") throw e;
-    throw new Error("Impossible de joindre Claude : vérifie ta connexion Internet.");
+    throw new Error("Impossible de joindre l'IA : vérifie ta connexion Internet.");
   }
   let d = {};
   try { d = await r.json(); } catch (_) {}
-  if (!r.ok) {
-    const msg = String(d.error && d.error.message || "");
-    if (r.status === 401) throw new Error("Clé Claude refusée : vérifie la clé (retire-la puis colle-la à nouveau).");
-    if (r.status === 403) throw new Error("Cette clé Claude n'a pas le droit d'utiliser ce modèle.");
-    if (r.status === 413) throw new Error("Le cours est trop gros pour une seule fois : découpe-le en plusieurs parties.");
-    if (r.status === 429) throw new Error("Trop de demandes à Claude : attends une minute et réessaie.");
-    if (/credit|billing/i.test(msg)) throw new Error("Plus de crédit sur ce compte Claude : recharge-le sur console.anthropic.com.");
-    if (r.status === 400) throw new Error("Claude a refusé la demande : " + (msg || "cours illisible ou trop long."));
-    throw new Error(`Claude ne répond pas correctement (erreur ${r.status}) : réessaie plus tard.`);
-  }
-  if (d.stop_reason === "refusal") throw new Error("Claude a refusé de traiter ce cours.");
-  if (d.stop_reason === "max_tokens") throw new Error("Le cours est trop long pour une seule fois : découpe-le en plusieurs parties.");
-  const texte = ((d.content || []).find(b => b.type === "text") || {}).text || "";
-  try { return JSON.parse(texte); } catch (_) { throw new Error("La réponse de Claude n'a pas pu être lue : réessaie."); }
+  if (!r.ok && !d.erreur && (r.status === 504 || r.status === 546)) throw new Error("L'IA met trop de temps sur ce cours : demande moins de fiches, ou découpe-le en plusieurs parties.");
+  if (!r.ok || !d.resultat) throw new Error(d.erreur || `L'IA ne répond pas correctement (erreur ${r.status}) : réessaie plus tard.`);
+  return d.resultat;
 }
 
 function messageErreur(e) {
@@ -855,21 +780,6 @@ function nettoyerResultat(r) {
   return { titre: String(r.titre || "").trim() || "Nouveau cours", matiere: String(r.matiere || "").trim(), cartes, quiz };
 }
 
-function messageErreur(e) {
-  if (e instanceof Error) return e.message;
-  const messages = {
-    not_granted: "Tu n'as pas autorisé la page à utiliser Claude. Recharge la page pour qu'elle te le redemande.",
-    sampling_disabled: "Claude n'est pas disponible pour ton compte.",
-    rate_limited: "Trop de demandes à Claude, ou limite d'utilisation atteinte : réessaie un peu plus tard.",
-    session_expired: "Ta connexion à Claude a expiré : reconnecte-toi puis réessaie.",
-    prompt_too_large: "Le cours est trop long pour une seule fois : découpe-le en plusieurs parties.",
-    refused: "Claude a refusé de traiter ce cours.",
-    invalid_json: "La réponse de Claude n'a pas pu être lue : réessaie.",
-    empty_completion: "Claude n'a rien répondu : réessaie avec un cours plus court.",
-  };
-  return messages[e && e.code] || "Claude ne répond pas pour l'instant : réessaie dans un moment.";
-}
-
 // ---------- Lecture des fichiers de cours ----------
 function chargerScript(src) {
   return new Promise((ok, ko) => {
@@ -885,7 +795,7 @@ async function blocFichier(f) {
     const octets = new Uint8Array(await f.arrayBuffer());
     let binaire = "";
     for (let i = 0; i < octets.length; i += 0x8000) binaire += String.fromCharCode(...octets.subarray(i, i + 0x8000));
-    return { type: "document", source: { type: "base64", media_type: "application/pdf", data: btoa(binaire) } };
+    return { type: "pdf", data: btoa(binaire) };
   }
   let texte;
   if (nom.endsWith(".txt") || nom.endsWith(".md")) texte = (await f.text()).trim();
@@ -1031,7 +941,7 @@ async function reinitialiser(p) {
   for (const c of p.cartes) Object.assign(c, { boite: 0, vues: 0, prochaine: 0 });
   sauver(); notif("Toutes les fiches sont à revoir"); rafraichir();
 }
-// QCM fabriqué sans Claude : la réponse d'une fiche parmi les réponses d'autres fiches
+// QCM fabriqué sans IA : la réponse d'une fiche parmi les réponses d'autres fiches
 function quizDepuisCartes(p) {
   const cartes = p.cartes.filter(c => c.verso.trim());
   const questions = [];
